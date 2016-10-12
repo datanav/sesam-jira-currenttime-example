@@ -1,0 +1,9 @@
+{
+  "_id": "jira",
+  "database": "$ENV(jira-database)",
+  "host": "$ENV(jira-host)",
+  "password": "$SECRET(jira-password)",
+  "port": "$ENV(jira-port)",
+  "type": "system:mssql",
+  "username": "$SECRET(jira-username)"
+}

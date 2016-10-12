@@ -1,0 +1,9 @@
+{
+  "_id": "currenttime",
+  "database": "$ENV(currenttime-database)",
+  "host": "$ENV(currenttime-host)",
+  "password": "$SECRET(currenttime-password)",
+  "port": "$ENV(currenttime-port)",
+  "type": "system:mssql",
+  "username": "$SECRET(currenttime-username)"
+}

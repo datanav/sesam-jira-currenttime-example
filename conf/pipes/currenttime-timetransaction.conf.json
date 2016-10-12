@@ -1,0 +1,15 @@
+{
+  "_id": "currenttime-timetransaction",
+  "source": {
+    "system": "currenttime",
+    "type": "sql",
+    "query": "select * from timetransaction where timedate >= CONVERT(datetime, '20160920 23:59:59')",
+    "updated_query": "select * from timetransaction where updatedate >= :since",
+    "updated_column": "updatedate",
+    "primary_key": "timetransactionid"
+  },
+  "pump": {
+    "cron_expression": "0 * * * *"
+  },
+  "type": "pipe"
+}

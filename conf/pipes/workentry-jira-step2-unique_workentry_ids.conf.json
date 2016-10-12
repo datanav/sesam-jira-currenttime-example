@@ -1,0 +1,20 @@
+{
+  "_id": "workentry-jira-step2-unique_workentry_ids",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-jira-step1-cook-jira-worklog"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+          "We use the '_S.workentry_id' as the '_id', in order to get a list of unique workentry ids. The next step ",
+          "will read this dataset and do hops to 'worklog-jira-step1-cook-jira-worklog' to get all the entities ",
+          "that should contribute to the final workentry."],
+        ["add", "_id", "_S.workentry_id"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

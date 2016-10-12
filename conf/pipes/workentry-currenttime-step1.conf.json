@@ -1,0 +1,57 @@
+{
+  "_id": "workentry-currenttime-step1",
+  "source": {
+    "type": "dataset",
+    "dataset": "currenttime-timetransaction"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["add", "temp_currenttime_timeheader",
+          ["apply-hops", "timeheader", {
+            "datasets": ["currenttime-timeheader currenttime_timeheader"],
+            "where":
+              ["eq", ["string", "_S.timeheaderid"], "currenttime_timeheader._id"]
+            }
+          ]
+        ],
+
+        ["copy", "note"],
+        ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.timedate"]],
+        ["add", "timeworked", ["integer", ["*", 3600, "_S.duration"]]],
+        ["add", "currenttime_subtask_id", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask._id"]],
+        ["add", "user_email", ["first", "_T.temp_currenttime_timeheader.currenttime_employee.email1"]],
+
+        ["add", "_id", ["concat", ["list", "_T.user_email", "--", "_T.date", "--", "_T.currenttime_subtask_id"]]],
+
+        ["remove", "temp_*"]
+      ],
+      "timeheader": [
+        ["add", "currenttime_subtask",
+          ["apply-hops", "subtask", {
+            "datasets": ["currenttime-subtask currenttime_subtask"],
+            "where":
+              ["eq", ["string", "_S.subtaskid"], "currenttime_subtask._id"]
+            }
+          ]
+        ],
+        ["add", "currenttime_employee",
+          ["apply-hops", "employee", {
+            "datasets": ["currenttime-employee currenttime_employee"],
+            "where":
+              ["eq", ["string", "_S.employeeid"], "currenttime_employee._id"]
+            }
+          ]
+        ]
+      ],
+      "subtask": [
+        ["copy", "*"]
+      ],
+      "employee": [
+        ["copy", "*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

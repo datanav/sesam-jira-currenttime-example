@@ -1,0 +1,12 @@
+{
+  "_id": "currenttime-timeheader",
+  "source": {
+    "system": "currenttime",
+    "table": "timeheader",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

@@ -1,0 +1,55 @@
+{
+  "_id": "workentry-jira-step1-cook-jira-worklog",
+  "source": {
+    "type": "dataset",
+    "dataset": "jira-worklog"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+
+        ["comment", "We round off to the closest second, just to make things look nicer."],
+        ["add", "timeworked", ["integer", "_S.timeworked"]],
+
+        ["comment", "In the 'jira-worklog' dataset the issueid is a float, for some reason"],
+        ["add", "issueid", ["string", "_S.issueid"]],
+
+        ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.STARTDATE"]],
+
+        ["comment", "Look up the user's email address and store it."],
+        ["add", "temp_jira_cwd_user",
+          ["hops", {
+            "datasets": ["jira-cwd_user jira_cwd_user"],
+            "where":
+              ["eq", "_S.AUTHOR", "jira_cwd_user.user_name"]
+            }
+          ]
+        ],
+        ["add", "user_email", ["first", "_T.temp_jira_cwd_user.email_address"]],
+
+        ["comment", "Look up the jira issue key and store it."],
+        ["add", "temp_cooked_jira_jiraissue",
+          ["hops", {
+            "datasets": ["cooked-jira-jiraissue cooked_jira_jiraissue"],
+            "where":
+              ["eq", ["string", "_S.issueid"], "cooked_jira_jiraissue._id"]
+            }
+          ]
+        ],
+        ["add", "jira_issue_key", ["first", "_T.temp_cooked_jira_jiraissue.jira_issue_key"]],
+
+        ["comment",
+          "Create the id of the 'jira-workentry' entity that this entity will eventually ",
+          "contribute to."
+        ],
+        ["add", "workentry_id", ["concat", ["list", "_T.user_email", "--", "_T.date", "--", "_T.jira_issue_key"]]],
+
+        ["comment", "Remove the temporary variables."],
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

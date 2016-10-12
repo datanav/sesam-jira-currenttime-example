@@ -1,0 +1,12 @@
+{
+  "_id": "currenttime-projecttype",
+  "source": {
+    "system": "currenttime",
+    "table": "projecttype",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "currenttime-employee",
+  "source": {
+    "system": "currenttime",
+    "table": "employee",
+    "type": "sql",
+    "blacklist": ["pinsalt", "salt", "pincode", "pwd"],
+    "updated_column": "updatedate"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

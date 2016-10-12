@@ -1,0 +1,12 @@
+{
+  "_id": "currenttime-task",
+  "source": {
+    "system": "currenttime",
+    "table": "task",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

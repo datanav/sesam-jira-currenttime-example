@@ -1,0 +1,15 @@
+{
+  "_id": "jira-worklog",
+  "source": {
+    "system": "jira",
+    "type": "sql",
+    "query": "select * from worklog where STARTDATE >= CONVERT(datetime, '20160920 23:59:59')",
+    "updated_query": "select * from worklog where UPDATED >= :since",
+    "primary_key": "ID",
+    "updated_column": "UPDATED"
+  },
+  "pump": {
+    "cron_expression": "0 * * * *"
+  },
+  "type": "pipe"
+}

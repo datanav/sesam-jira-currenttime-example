@@ -1,0 +1,12 @@
+{
+  "_id": "currenttime-subtask",
+  "source": {
+    "system": "currenttime",
+    "table": "subtask",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

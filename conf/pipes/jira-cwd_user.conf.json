@@ -1,0 +1,14 @@
+{
+  "_id": "jira-cwd_user",
+  "source": {
+    "system": "jira",
+    "table": "cwd_user",
+    "type": "sql",
+    "blacklist": ["CREDENTIAL"],
+    "updated_column": "updated_date"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

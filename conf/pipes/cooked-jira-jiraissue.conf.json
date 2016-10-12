@@ -1,0 +1,33 @@
+{
+  "_id": "cooked-jira-jiraissue",
+  "source": {
+    "type": "dataset",
+    "dataset": "jira-jiraissue"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "Look up the jira-project so that we can generate the human-readable jira key ('SSD-333', 'FS-23', etc)."],
+
+        ["add", "temp_jira_project",
+          ["hops", {
+            "datasets": ["jira-project jira_project"],
+            "where":
+              ["eq", ["string", "_S.PROJECT"], "jira_project._id"]
+            }
+          ]
+        ],
+        ["add", "jira_issue_key",
+          ["concat", ["list", ["first", "_T.temp_jira_project.pkey"], "-", ["string", "_S.issuenum"]]]],
+
+        ["comment", "Remove the temporary variables."],
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "mapping-reference-fields-step3",
+  "source": {
+    "type": "dataset",
+    "dataset": "mapping-reference-fields-step2"
+  },
+  "transform": {
+    "type": "emit_children"
+  },
+  "pump": {
+    "cron_expression": "0 * * * *"
+  },
+  "type": "pipe"
+}

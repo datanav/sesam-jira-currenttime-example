@@ -1,0 +1,23 @@
+{
+  "_id": "mapping-reference-fields-step1",
+  "source": {
+    "type": "config",
+    "entities": [
+      {
+        "_id": "12110",
+        "customfield_id": "12110",
+        "customfield_name": "Fasit CT"
+      },
+      {
+        "_id": "10410",
+        "customfield_id": "10410",
+        "customfield_name": "CT-ref Test"
+      }
+    ]
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *",
+    "run_at_startup": true
+  },
+  "type": "pipe"
+}

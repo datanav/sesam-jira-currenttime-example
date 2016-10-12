@@ -1,0 +1,21 @@
+{
+  "_id": "workentry-currenttime-step2-note-filter",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step1"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment", "filter out entities without a note"],
+        ["filter",
+          ["and",
+            ["not", ["is-null", "_S.note"]],
+            ["neq", ["strip", "_S.note"], ""]]],
+        ["copy", "*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

@@ -1,0 +1,25 @@
+{
+  "_id": "workentry-currenttime-step5-create-jiraissue-keys-children",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step4-jiraissue-keys-filter"
+  },
+  "sink": {
+    "type": "dataset",
+    "track_children": true,
+    "dataset": "workentry-currenttime-step5-create-jiraissue-keys-children"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+        ["create-child", ["apply", "jiraissuekey", "_S.possible_jira_issue_keys"]]
+      ],
+      "jiraissuekey": [
+        ["add", "jira_issue_key", "_."]
+      ]
+    }
+  },
+  "type": "pipe"
+}

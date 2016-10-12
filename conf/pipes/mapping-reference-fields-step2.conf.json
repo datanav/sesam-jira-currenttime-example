@@ -1,0 +1,33 @@
+{
+  "_id": "mapping-reference-fields-step2",
+  "source": {
+    "type": "dataset",
+    "dataset": "mapping-reference-fields-step1"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+        ["add", "temp_jira_customfieldvalue",
+          ["hops", {
+            "datasets": ["jira-customfieldvalue jira_customfieldvalue"],
+            "where": ["or",
+              ["eq", "_S._id", ["string", "jira_customfieldvalue.CUSTOMFIELD"]]
+
+          ]}
+        ]
+      ]
+      ]
+     }
+  },
+  "sink": {
+    "type": "dataset",
+    "dataset": "mapping-reference-fields-step2",
+    "track_children": true
+  },
+  "pump": {
+    "cron_expression": "0 * * * *"
+  },
+  "type": "pipe"
+}

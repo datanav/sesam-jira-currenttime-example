@@ -1,0 +1,12 @@
+{
+  "_id": "jira-project",
+  "source": {
+    "system": "jira",
+    "table": "project",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

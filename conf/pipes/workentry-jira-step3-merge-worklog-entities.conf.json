@@ -1,0 +1,42 @@
+{
+  "_id": "workentry-jira-step3-merge-worklog-entities",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-jira-step2-unique_workentry_ids"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+          "We iterate over the 'workentry-jira-step2-unique_workentry_ids' dataset and do a hops to ",
+          "'worklog-jira-step1-cook-jira-worklog' to get all the entities ",
+          "that should contribute to the final workentry."],
+
+        ["copy", "_id"],
+        ["add", "temp_worklog_entities",
+          ["hops", {
+            "datasets": ["workentry-jira-step1-cook-jira-worklog worklog"],
+            "where":
+              ["eq", "_S._id", "worklog.workentry_id"]
+            }
+          ]
+        ],
+
+        ["comment",
+          "By definition, all the matching worklog entities has the same ",
+          "'date', 'user_email' and 'jira_issue_key' attributes, so we ",
+          "can just pick the first value of each."],
+        ["add", "date", ["first", "_T.temp_worklog_entities.date"]],
+        ["add", "user_email", ["first", "_T.temp_worklog_entities.user_email"]],
+        ["add", "jira_issue_key", ["first", "_T.temp_worklog_entities.jira_issue_key"]],
+
+        ["comment", "Get the total number of seconds worked by the user on this task on this date."],
+        ["add", "timeworked", ["sum", "_T.temp_worklog_entities.timeworked"]],
+
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

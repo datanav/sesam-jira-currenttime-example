@@ -1,0 +1,13 @@
+{
+  "_id": "jira-jiraissue",
+  "source": {
+    "system": "jira",
+    "table": "jiraissue",
+    "type": "sql",
+    "updated_column": "UPDATED"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}
