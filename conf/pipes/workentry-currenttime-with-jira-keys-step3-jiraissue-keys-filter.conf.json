@@ -1,8 +1,8 @@
 {
-  "_id": "workentry-currenttime-step4-jiraissue-keys-filter",
+  "_id": "workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter",
   "source": {
     "type": "dataset",
-    "dataset": "workentry-currenttime-step3-jiraissue-keys"
+    "dataset": "workentry-currenttime-with-jira-keys-step2-jiraissue-keys"
   },
   "transform": {
     "type": "dtl",
@@ -14,6 +14,9 @@
         ["copy", "*"]
       ]
     }
+  },
+  "pump": {
+    "schedule_interval": 1
   },
   "type": "pipe"
 }

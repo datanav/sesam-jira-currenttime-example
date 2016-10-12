@@ -1,0 +1,32 @@
+{
+  "_id": "cooked-currenttime-project",
+  "source": {
+    "type": "dataset",
+    "dataset": "currenttime-project"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "Denormalize a bit by looking up the projecttype ."],
+
+        ["add", "temp_currenttime_projecttype",
+          ["hops", {
+            "datasets": ["currenttime-projecttype currenttime_projecttype"],
+            "where":
+              ["eq", ["string", "_S.projecttype"], "currenttime_projecttype._id"]
+            }
+          ]
+        ],
+        ["add", "projecttypename", ["first", "_T.temp_currenttime_projecttype.projecttypename"]],
+
+        ["comment", "Remove the temporary variables."],
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

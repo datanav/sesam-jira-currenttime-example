@@ -1,0 +1,14 @@
+{
+  "_id": "workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children"
+  },
+  "transform": {
+     "type": "emit_children"
+  },
+  "pump": {
+    "schedule_interval": 1
+  },
+  "type": "pipe"
+}

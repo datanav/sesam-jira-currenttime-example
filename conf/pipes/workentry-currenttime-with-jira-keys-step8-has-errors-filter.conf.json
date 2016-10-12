@@ -1,8 +1,8 @@
 {
-  "_id": "workentry-currenttime-step9-has-errors-filter",
+  "_id": "workentry-currenttime-with-jira-keys-step8-has-errors-filter",
   "source": {
     "type": "dataset",
-    "dataset": "workentry-currenttime-step8-compare-hours"
+    "dataset": "workentry-currenttime-with-jira-keys-step7-compare-hours"
   },
   "transform": {
     "type": "dtl",
@@ -13,6 +13,9 @@
         ["copy", "*"]
       ]
     }
+  },
+  "pump": {
+    "schedule_interval": 1
   },
   "type": "pipe"
 }

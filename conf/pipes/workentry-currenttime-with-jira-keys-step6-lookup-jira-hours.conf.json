@@ -1,8 +1,8 @@
 {
-  "_id": "workentry-currenttime-step7-lookup-jira-hours",
+  "_id": "workentry-currenttime-with-jira-keys-step6-lookup-jira-hours",
   "source": {
     "type": "dataset",
-    "dataset": "workentry-currenttime-step6-emit-jiraissue-keys-children"
+    "dataset": "workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children"
   },
   "transform": {
     "type": "dtl",
@@ -35,6 +35,9 @@
         ["remove", "temp_*"]
       ]
     }
+  },
+  "pump": {
+    "schedule_interval": 1
   },
   "type": "pipe"
 }

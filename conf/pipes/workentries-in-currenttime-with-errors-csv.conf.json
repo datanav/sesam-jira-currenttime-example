@@ -1,0 +1,36 @@
+{
+  "_id": "workentries-in-currenttime-with-errors-csv",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentries-in-currenttime-with-errors"
+  },
+  "sink": {
+    "type": "csv_endpoint",
+    "columns": [
+      "date",
+      "user_name",
+      "note_from_currenttime",
+      "errors",
+      "timeworked_from_currenttime",
+      "timeworked_from_jira",
+      "jira_issue_keys_from_currentime_note",
+      "currenttime_subtask",
+      "currenttime_task",
+      "currenttime_project",
+      "currenttime_projecttype"],
+    "delimiter": ";",
+    "lineterminator": "\r\n"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["if", ["eq", "_S._deleted", false],
+          ["add", "date", "never!"]
+        ],
+        ["copy", "*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

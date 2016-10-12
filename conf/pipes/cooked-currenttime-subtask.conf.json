@@ -1,0 +1,43 @@
+{
+  "_id": "cooked-currenttime-subtask",
+  "source": {
+    "type": "dataset",
+    "dataset": "currenttime-subtask"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "Denormalize a bit by looking up the currentime-task and currenttime-project names."],
+
+        ["add", "temp_currenttime_task",
+          ["hops", {
+            "datasets": ["currenttime-task currenttime_task"],
+            "where":
+              ["eq", ["string", "_S.taskid"], "currenttime_task._id"]
+            }
+          ]
+        ],
+        ["add", "taskname", ["first", "_T.temp_currenttime_task.taskname"]],
+
+        ["add", "temp_currenttime_project",
+          ["hops", {
+            "datasets": ["cooked-currenttime-project currenttime_project"],
+            "where":
+              ["eq", ["string", "_S.projectid"], "currenttime_project._id"]
+            }
+          ]
+        ],
+        ["add", "projectname", ["first", "_T.temp_currenttime_project.projectname"]],
+        ["add", "projecttypename", ["first", "_T.temp_currenttime_project.projecttypename"]],
+
+        ["comment", "Remove the temporary variables."],
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}
