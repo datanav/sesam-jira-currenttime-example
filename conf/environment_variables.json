@@ -1,0 +1,9 @@
+{
+  "jira-host": "REPLACE_WITH_YOUR_JIRA_DB_HOST",
+  "jira-port": REPLACE_WITH_YOUR_JIRA_DB_PORT,
+  "jira-database": "REPLACE_WITH_YOUR_JIRA_DB_DATABASE_NAME",
+  
+  "currenttime-host": "REPLACE_WITH_YOUR_CURRENTTIME_DB_HOST",
+  "currenttime-port": REPLACE_WITH_YOUR_CURRENTTIME_DB_PORT,
+  "currenttime-database": "REPLACE_WITH_YOUR_CURRENTTIME_DB_DATABASENAME"
+}
