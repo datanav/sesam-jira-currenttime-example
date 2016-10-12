@@ -9,7 +9,7 @@
     "primary_key": "timetransactionid"
   },
   "pump": {
-    "cron_expression": "0 * * * *"
+    "cron_expression": "*/5 * * * *"
   },
   "type": "pipe"
 }

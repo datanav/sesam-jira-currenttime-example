@@ -1,0 +1,18 @@
+{
+  "_id": "workentry-currenttime-step9-has-errors-filter",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step8-compare-hours"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["filter",
+          ["not", ["is-empty", "_S.errors"]]],
+        ["copy", "*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

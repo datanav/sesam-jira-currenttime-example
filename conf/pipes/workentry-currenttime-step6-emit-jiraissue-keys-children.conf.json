@@ -1,0 +1,11 @@
+{
+  "_id": "workentry-currenttime-step6-emit-jiraissue-keys-children",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step5-create-jiraissue-keys-children"
+  },
+  "transform": {
+     "type": "emit_children"
+  },
+  "type": "pipe"
+}

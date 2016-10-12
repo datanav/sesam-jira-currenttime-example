@@ -1,0 +1,40 @@
+{
+  "_id": "workentry-currenttime-step7-lookup-jira-hours",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step6-emit-jiraissue-keys-children"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+          "Look up the corresponding 'workentry-jira' entity and get the timeworked form it."],
+        ["copy", "*"],
+        ["add", "temp_workentry_jira", ["hops", {
+          "datasets": ["workentry-jira-step3-merge-worklog-entities workentry_jira"],
+          "where": [
+            ["eq", "workentry_jira._id", "_S._id"]
+          ]}]],
+        ["comment",
+          "There is only at most one jira workentry, but we use the sum-function since hops always returns a list."],
+        ["add", "jira_timeworked", ["sum", "_T.temp_workentry_jira.timeworked"]],
+
+
+        ["comment",
+          "If no time has been logged on the jira-issue, check if the jira-issue exists at all."],
+        ["if", ["is-empty", "_T.temp_workentry_jira"],
+          ["add", "jira_issue_exists",
+            ["not", ["is-empty",
+              ["hops", {
+                "datasets": ["cooked-jira-jiraissue jiraissue"],
+                "where": [
+                  ["eq", "jiraissue.jira_issue_key", "_S.jira_issue_key"]]}]]]],
+          ["add", "jira_issue_exists", true]],
+
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

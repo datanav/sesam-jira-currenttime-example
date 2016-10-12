@@ -18,16 +18,7 @@
 
         ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.STARTDATE"]],
 
-        ["comment", "Look up the user's email address and store it."],
-        ["add", "temp_jira_cwd_user",
-          ["hops", {
-            "datasets": ["jira-cwd_user jira_cwd_user"],
-            "where":
-              ["eq", "_S.AUTHOR", "jira_cwd_user.user_name"]
-            }
-          ]
-        ],
-        ["add", "user_email", ["first", "_T.temp_jira_cwd_user.email_address"]],
+        ["add", "user_name", "_S.AUTHOR"],
 
         ["comment", "Look up the jira issue key and store it."],
         ["add", "temp_cooked_jira_jiraissue",
@@ -44,7 +35,7 @@
           "Create the id of the 'jira-workentry' entity that this entity will eventually ",
           "contribute to."
         ],
-        ["add", "workentry_id", ["concat", ["list", "_T.user_email", "--", "_T.date", "--", "_T.jira_issue_key"]]],
+        ["add", "workentry_id", ["concat", ["list", "_T.user_name", "--", "_T.date", "--", "_T.jira_issue_key"]]],
 
         ["comment", "Remove the temporary variables."],
         ["remove", "temp_*"]

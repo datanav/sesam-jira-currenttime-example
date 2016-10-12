@@ -13,11 +13,17 @@
     "type": "dtl",
     "rules": {
       "default": [
+        ["comment",
+          "Create one entity for each jirakey that was references in the 'note'-field of the ",
+          "currentime-timetransaction."],
         ["copy", "*"],
-        ["create-child", ["apply", "jiraissuekey", "_S.possible_jira_issue_keys"]]
+        ["create-child", ["apply", "jiraissuekey", "_S.jira_issue_keys"]]
       ],
       "jiraissuekey": [
-        ["add", "jira_issue_key", "_."]
+        ["add", "jira_issue_key", "_S."],
+        ["add", "_id", ["concat", ["list", "_P._S.user_name", "--", "_P._S.date", "--", "_T.jira_issue_key"]]],
+        ["add", "workentry_currenttime_id", "_P._S._id"],
+        ["add", "timetransaction_id", "_P._S.timetransaction_id"]
       ]
     }
   },

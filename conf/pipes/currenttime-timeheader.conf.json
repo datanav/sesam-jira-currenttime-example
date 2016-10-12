@@ -6,7 +6,7 @@
     "type": "sql"
   },
   "pump": {
-    "cron_expression": "0 0 * * *"
+    "cron_expression": "0 * * * *"
   },
   "type": "pipe"
 }

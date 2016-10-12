@@ -1,0 +1,18 @@
+{
+  "_id": "workentry-currenttime-step8b-knut.johannessen-filter",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step8-compare-hours"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["filter",
+          ["eq", "_S.user_name", "knut.johannessen"]],
+        ["copy", "*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

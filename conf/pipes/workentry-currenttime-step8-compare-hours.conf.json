@@ -1,0 +1,72 @@
+{
+  "_id": "workentry-currenttime-step8-compare-hours",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-step4-jiraissue-keys-filter"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+          "Look up the corresponding 'workentry-currenttime-step7-lookup-jira-hours' entities."],
+        ["copy", "*"],
+        ["add", "temp_lookup_jira_hours", ["hops", {
+          "datasets": ["workentry-currenttime-step7-lookup-jira-hours lookup_jira_hours"],
+          "where": [
+            ["eq", "lookup_jira_hours.workentry_currenttime_id", "_S._id"]
+          ]}]],
+
+        ["comment",
+          "Get the total jira-timeworked from all the jira-tasks."],
+        ["add", "total_jira_timeworked", ["sum", "_T.temp_lookup_jira_hours.jira_timeworked"]],
+
+        ["comment",
+          "Store the keys of any non-existing jira-issues. This happens when a user has mistyped a JIRA issue-key ",
+          "in the 'note'-field in CurrentTime."],
+        ["add", "non_existing_jira_issue_keys",
+          ["path", "jira_issue_key",
+            ["filter", ["not", "_.jira_issue_exists"], "_T.temp_lookup_jira_hours"]]],
+
+        ["comment",
+          "Get the jira-issues that exists, but where no time has been logged."],
+        ["add", "zero_timeworked_jira_issue_keys",
+          ["path", "jira_issue_key",
+            ["filter", ["and", "_.jira_issue_exists", ["eq", "_.jira_timeworked", 0]], "_T.temp_lookup_jira_hours"]]],
+
+        ["comment", "check for discrepancies, and add any errors to the 'errors' attribute"],
+        ["add", "errors", ["list"]],
+
+        ["if", ["not", ["is-empty", "_T.non_existing_jira_issue_keys"]],
+          ["add", "errors", ["union", "_T.errors", ["concat",
+            ["list",
+              "The 'note'-field in CurrentTime refer to ",
+              ["if", ["eq", ["count", "_T.non_existing_jira_issue_keys"], 1], "this non-existing JIRA-issue: ", "these non-existing JIRA-issues: "],
+              ["join", ", ", "_T.non_existing_jira_issue_keys"]
+            ]]]]],
+
+
+        ["if", ["not", ["is-empty", "_T.zero_timeworked_jira_issue_keys"]],
+          ["add", "errors", ["union", "_T.errors", ["concat",
+            ["list",
+              "No hours has been logged in JIRA for ",
+              ["if", ["eq", ["count", "_T.zero_timeworked_jira_issue_keys"], 1], "this JIRA-issue: ", "these JIRA-issues: "],
+              ["join", ", ", "_T.zero_timeworked_jira_issue_keys"]
+            ]]]]],
+
+        ["if", ["and", ["neq", "_T.timeworked", "_T.total_jira_timeworked"], ["neq", "_T.total_jira_timeworked", 0]],
+          ["add", "errors", ["union", "_T.errors", ["concat",
+            ["list",
+              "The hours logged in CurrentTime and JIRA are not identical. JIRA: ",
+              ["string", "_T.total_jira_timeworked"],
+              " seconds. CurrentTime: ",
+              ["string", "_T.timeworked"],
+              " seconds."
+            ]]]]],
+
+        ["remove", "xtemp_*"]
+      ]
+    }
+  },
+  "type": "pipe"
+}

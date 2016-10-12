@@ -17,13 +17,30 @@
           ]
         ],
 
+        ["comment",
+          "If no timeheader was found, we stop. This can happen since we poll the timestransaction table ",
+          "more frequently than the timeheader table. (The content of the timeheader rarely changes, and it ",
+          "is expensive to query it, since it doens't have an 'updated' column.). Once the missing timeheader ",
+          "entry appears, this corresponding timetransaction entity will be re-processed, so eventually all ",
+          "will be well."
+        ],
+        ["filter", ["not", ["is-empty", "_T.temp_currenttime_timeheader"]]],
+
         ["copy", "note"],
+        ["add", "timetransaction_id", "_S._id"],
         ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.timedate"]],
         ["add", "timeworked", ["integer", ["*", 3600, "_S.duration"]]],
         ["add", "currenttime_subtask_id", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask._id"]],
-        ["add", "user_email", ["first", "_T.temp_currenttime_timeheader.currenttime_employee.email1"]],
 
-        ["add", "_id", ["concat", ["list", "_T.user_email", "--", "_T.date", "--", "_T.currenttime_subtask_id"]]],
+        ["comment",
+          "Sometimes the username includes a domain, like this: 'bouvet\\knut.johannessen', ",
+          "so we must use the 'split' function to just keep the real username-part."],
+        ["add", "user_name",
+          ["last",
+            ["split", "\\",
+              ["first", "_T.temp_currenttime_timeheader.currenttime_employee.username"]]]],
+
+        ["add", "_id", ["concat", ["list", "_T.user_name", "--", "_T.date", "--", "_T.currenttime_subtask_id"]]],
 
         ["remove", "temp_*"]
       ],

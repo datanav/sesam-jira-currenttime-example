@@ -8,9 +8,9 @@
     "type": "dtl",
     "rules": {
       "default": [
-        ["comment", "filter out entities that have no possible jira-issue keys"],
+        ["comment", "filter out entities that have no jira-issue keys"],
         ["filter",
-          ["not", ["is-empty", "_S.possible_jira_issue_keys"]]],
+          ["not", ["is-empty", "_S.jira_issue_keys"]]],
         ["copy", "*"]
       ]
     }
