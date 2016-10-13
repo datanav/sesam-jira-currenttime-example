@@ -9,7 +9,7 @@
     "rules": {
       "default": [
         ["comment",
-          "Look up the corresponding 'workentry-jira' entity and get the timeworked form it."],
+          "Look up the corresponding 'workentry-jira' entity and get the timeworked from it."],
         ["copy", "*"],
         ["add", "temp_workentry_jira", ["hops", {
           "datasets": ["workentry-jira-step3-merge-worklog-entities workentry_jira"],
