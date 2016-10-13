@@ -35,13 +35,9 @@
         ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.timedate"]],
 
         ["comment",
-          "We only keep (at most) one decimal value, to avoid values like '2.5000000'. '2.5' is much more readable, ",
-          "and we almost never have any timeinterval with more granularity that one half hour."
+          "Trick the decimal to loose trailing zeros, to avoid values like '2.5000000'. '2.5' is much more readable."
           ],
-        ["add", "timeworked",
-          ["/",
-            ["integer", ["*", "_S.duration", 10]],
-            ["decimal", 10]]],
+        ["add", "timeworked", ["*", "_S.duration", 1]],
         ["add", "currenttime_subtask_id", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask._id"]],
 
         ["comment",

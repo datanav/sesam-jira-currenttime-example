@@ -1,5 +1,5 @@
 {
-  "_id": "workentry-total-currenttime-step3-merge-worklog-entities",
+  "_id": "workentry-total-currenttime-step3-merge",
   "source": {
     "type": "dataset",
     "dataset": "workentry-total-currenttime-step2-unique-workentry_total_id"

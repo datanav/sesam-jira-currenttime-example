@@ -85,8 +85,8 @@ we want. The "workentry-currenttime" pipe just have to collect some extra inform
 (for instance getting the "user_email" attribute from the "currenttime-employee" dataset). 
 
 We also filter out entries where the currenttime_subtask refers to some internal activity that will not have a 
-JIRA-task ("Lunch", "Doctor's appointment", etc).
-
+JIRA-task ("Lunch", "Doctor's appointment", etc). This is done by checking if the projecttypename of the
+currenttime-subtask exists in the hardcoded "config-internal-projecttype-names" dataset.
 
 
 ### Creating "workentry-jira"
@@ -140,10 +140,26 @@ of the source entity. Store the sum of the time worked.
 In this flow we want to create a dataset where each entity represents all the work one user has logged
 per day in JIRA, across all JIRA issues. The procedure is identical to how "workentry-total-currenttime"
 is created, so we won't re-hash the details here. In short, we aggregate the values in the "workentry-jira"
-dataset for each user_name+date combination.
+dataset for each user_name+date combination. The results end up in the "workentry-total-jira-step3-merge"
+dataset.
 
 
 ### Finding errors in currenttime worklog entries with JIRA-keys
+
+TODO
+
+### Finding errors in the total number of hours in JIRA and CurrentTime
+
+As a rule, the total number of hours in JIRA and in CurrentTime (minus hours on internal projects) should match.
+To check this we compare the entities in the "workentry-total-jira-step3-merge" and "workentry-total-currenttime-step3-merge"
+datasets and check that the number of hours are the same in both. 
+
+This check is done by the following pipes:
+
+"compare-totals-step1-merge":
+This pipe uses the "merge_dataset" source to gather corresponding entities from the 
+"workentry-total-jira-step3-merge" and "workentry-total-currenttime-step3-merge"
+datasets. 
 
 
 
@@ -153,9 +169,17 @@ TODO
 
 ## Output
 
-The final product is a csv-file containing all mismatches. It is served on this url: 
+The csv-file that contains the errors in CurrentTime entries that refer to JIRA-tasks is served on this url: 
 
   `http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv`
+
+
+
+The csv-file that contains the mismatches between total number or hours logged in JIRA and in CurrentTime
+is served on this url: 
+
+  `http://localhost:9042/api/publishers/compare-totals-step4-csv/csv`
+
 
 This file can be retrieved by pasting the url into a web-browser. Alternativly, it can be downloaded with a commandline tool:
 
@@ -168,4 +192,6 @@ On Windows, start PowerShell and run this command:
   
 The resulting cvs-file is fairly big and human unfriendly, but a good way to view it is to open the file in Microsoft Excel and
 use Excel's functionality to do searching, filtering and sorting.  
+
+
 

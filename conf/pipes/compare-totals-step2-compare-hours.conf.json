@@ -1,0 +1,52 @@
+{
+  "_id": "compare-totals-step2-compare-hours",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "compare-totals-step1-merge"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+
+        ["add", "total_timeworked_from_currenttime", "_S.workentry-total-currenttime-step3-merge.timeworked"],
+        ["if", ["is-null", "_T.total_timeworked_from_currenttime"],
+          ["add", "total_timeworked_from_currenttime", ["decimal", "0"]]],
+
+        ["add", "total_timeworked_from_jira", "_S.workentry-total-jira-step3-merge.timeworked"],
+        ["if", ["is-null", "_T.total_timeworked_from_jira"],
+          ["add", "total_timeworked_from_jira", ["decimal", "0"]]],
+
+        ["if", ["is-null", "_S.workentry-total-jira-step3-merge"],
+          [
+            ["add", "user_name", "_S.workentry-total-currenttime-step3-merge.user_name"],
+            ["add", "date", "_S.workentry-total-currenttime-step3-merge.date"]
+          ],
+          [
+            ["add", "user_name", "_S.workentry-total-jira-step3-merge.user_name"],
+            ["add", "date", "_S.workentry-total-jira-step3-merge.date"]
+          ]
+        ],
+
+        ["add", "errors", ""],
+        ["if", ["neq", "_T.total_timeworked_from_jira", "_T.total_timeworked_from_currenttime"],
+          ["add", "errors", ["concat",
+            ["list",
+              "The total number of hours logged in CurrentTime and JIRA are not identical. JIRA: ",
+              ["string", "_T.total_timeworked_from_jira"],
+              " hours. CurrentTime: ",
+              ["string", "_T.total_timeworked_from_currenttime"],
+              " hours"
+            ]]]],
+
+        ["remove", "workentry-total-*"]
+
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}

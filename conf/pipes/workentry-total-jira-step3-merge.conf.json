@@ -1,5 +1,5 @@
 {
-  "_id": "workentry-total-jira-step3-merge-worklog-entities",
+  "_id": "workentry-total-jira-step3-merge",
   "source": {
     "type": "dataset",
     "dataset": "workentry-total-jira-step2-unique-workentry_total_id"

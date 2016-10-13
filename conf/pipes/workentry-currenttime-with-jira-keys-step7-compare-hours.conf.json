@@ -67,7 +67,7 @@
               " hours"
             ]]]]],
 
-        ["remove", "xtemp_*"]
+        ["remove", "temp_*"]
       ]
     }
   },

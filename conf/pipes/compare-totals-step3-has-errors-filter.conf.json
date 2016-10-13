@@ -1,0 +1,21 @@
+{
+  "_id": "compare-totals-step3-has-errors-filter",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "compare-totals-step2-compare-hours"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment", "Skip entries without errors."],
+        ["filter", ["neq", "_S.errors", ""]],
+        ["copy", "*"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}
