@@ -1,0 +1,25 @@
+{
+  "_id": "workentry-total-currenttime-step1-cook",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "Create the id of the 'workentry-total-currenttime' entity that this entity will eventually ",
+          "contribute to."
+        ],
+        ["add", "workentry_total_id", ["concat", ["list", "_S.user_name", "--", "_S.date"]]]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

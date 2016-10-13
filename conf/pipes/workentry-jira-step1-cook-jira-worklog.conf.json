@@ -10,8 +10,8 @@
       "default": [
         ["copy", "_id"],
 
-        ["comment", "We round off to the closest second, just to make things look nicer."],
-        ["add", "timeworked", ["integer", "_S.timeworked"]],
+        ["comment", "Convert to hours."],
+        ["add", "timeworked", ["/", ["decimal", "_S.timeworked"], 3600]],
 
         ["comment", "In the 'jira-worklog' dataset the issueid is a float, for some reason"],
         ["add", "issueid", ["string", "_S.issueid"]],
@@ -43,7 +43,7 @@
     }
   },
   "pump": {
-    "schedule_interval": 1
+    "schedule_interval": 10
   },
   "type": "pipe"
 }

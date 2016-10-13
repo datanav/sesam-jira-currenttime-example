@@ -11,10 +11,10 @@
         ["copy", "*"],
 
         ["comment",
-          "Denormalize a bit by looking up the projecttype ."],
+          "Denormalize a bit by looking up the projecttype."],
 
         ["add", "temp_currenttime_projecttype",
-          ["hops", {
+          ["apply-hops", "projecttype", {
             "datasets": ["currenttime-projecttype currenttime_projecttype"],
             "where":
               ["eq", ["string", "_S.projecttype"], "currenttime_projecttype._id"]
@@ -22,7 +22,25 @@
           ]
         ],
         ["add", "projecttypename", ["first", "_T.temp_currenttime_projecttype.projecttypename"]],
+        ["add", "is_internal_projecttype", ["first", "_T.temp_currenttime_projecttype.is_internal_projecttype"]],
 
+        ["comment", "Remove the temporary variables."],
+        ["remove", "temp_*"]
+      ],
+      "projecttype": [
+        ["copy", "*"],
+
+        ["comment",
+          "Check if this is an internal project."],
+        ["add", "temp_internal_project_names",
+          ["hops", {
+            "datasets": ["config-internal-projecttype-names internal_projecttypes"],
+            "where":
+              ["eq", "_S.projecttypename", "internal_projecttypes._id"]
+            }
+          ]
+        ],
+        ["add", "is_internal_projecttype", ["not", ["is-empty", "_T.temp_internal_project_names"]]],
         ["comment", "Remove the temporary variables."],
         ["remove", "temp_*"]
       ]

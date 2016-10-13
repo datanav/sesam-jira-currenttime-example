@@ -22,8 +22,10 @@
         ["comment", "Rename and tweak some attributes to make them more end-user readable."],
         ["add", "errors", ["replace", "\n", " ", ["replace", "\r", " ", ["join", "\\. ", "_S.errors"]]]],
         ["add", "jira_issue_keys_from_currentime_note",  ["replace", "\n", " ", ["replace", "\r", " ", ["join", ", ", "_S.jira_issue_keys"]]]],
-        ["rename", "timeworked", "timeworked_from_currenttime"],
-        ["rename", "total_jira_timeworked", "timeworked_from_jira"],
+
+        ["add", "timeworked_from_currenttime", ["concat", ["list", ["string", "_S.timeworked"], "h"]]],
+        ["add", "timeworked_from_jira", ["concat", ["list", ["string", "_S.total_jira_timeworked"], "h"]]],
+
         ["add", "note_from_currenttime",  ["replace", "\n", " ", ["replace", "\r", " ", "_S.note"]]],
 
         ["comment",
@@ -48,7 +50,7 @@
     }
   },
   "pump": {
-    "schedule_interval": 1
+    "schedule_interval": 10
   },
   "type": "pipe"
 }

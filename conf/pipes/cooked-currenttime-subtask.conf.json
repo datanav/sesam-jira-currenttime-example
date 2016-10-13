@@ -33,6 +33,7 @@
         ],
         ["add", "projectname", ["first", "_T.temp_currenttime_project.projectname"]],
         ["add", "projecttypename", ["first", "_T.temp_currenttime_project.projecttypename"]],
+        ["add", "is_internal_projecttype", ["first", "_T.temp_currenttime_project.is_internal_projecttype"]],
 
         ["comment", "Remove the temporary variables."],
         ["remove", "temp_*"]

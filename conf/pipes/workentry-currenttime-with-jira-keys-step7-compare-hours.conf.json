@@ -20,6 +20,9 @@
         ["comment",
           "Get the total jira-timeworked from all the jira-tasks."],
         ["add", "total_jira_timeworked", ["sum", "_T.temp_lookup_jira_hours.jira_timeworked"]],
+        ["if", ["is-null", "_T.total_jira_timeworked"],
+          ["add", "total_jira_timeworked", ["decimal", "0"]]
+        ],
 
         ["comment",
           "Store the keys of any non-existing jira-issues. This happens when a user has mistyped a JIRA issue-key ",
@@ -59,9 +62,9 @@
             ["list",
               "The hours logged in CurrentTime and JIRA are not identical. JIRA: ",
               ["string", "_T.total_jira_timeworked"],
-              " seconds. CurrentTime: ",
+              " hours. CurrentTime: ",
               ["string", "_T.timeworked"],
-              " seconds"
+              " hours"
             ]]]]],
 
         ["remove", "xtemp_*"]
@@ -69,7 +72,7 @@
     }
   },
   "pump": {
-    "schedule_interval": 1
+    "schedule_interval": 10
   },
   "type": "pipe"
 }

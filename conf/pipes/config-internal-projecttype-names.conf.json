@@ -1,0 +1,18 @@
+{
+  "_id": "config-internal-projecttype-names",
+  "type": "pipe",
+  "source": {
+    "type": "config",
+    "entities": [
+      {"_id": "Permisjon"},
+      {"_id": "Avspasering"},
+      {"_id": "Fravær"},
+      {"_id": "Ferie"},
+      {"_id": "Fravær"},
+      {"_id": "Ikke fakturerbare timer"}
+    ]
+  },
+  "pump": {
+    "run_at_startup": true
+  }
+}

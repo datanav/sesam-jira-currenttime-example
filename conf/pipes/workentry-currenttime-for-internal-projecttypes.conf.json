@@ -1,5 +1,5 @@
 {
-  "_id": "workentry-currenttime",
+  "_id": "workentry-currenttime-for-internal-projecttypes",
   "source": {
     "type": "dataset",
     "dataset": "workentry-currenttime-cook"
@@ -9,8 +9,8 @@
     "rules": {
       "default": [
         ["comment",
-          "Skip time logged on internal projects."],
-        ["filter", ["not", "_S.is_internal_projecttype"]],
+          "Only include hours logged on internal projects."],
+        ["filter", "_S.is_internal_projecttype"],
         ["copy", "*", "is_internal_projecttype"]
       ]
     }

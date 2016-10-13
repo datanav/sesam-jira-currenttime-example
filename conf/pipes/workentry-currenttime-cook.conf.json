@@ -1,0 +1,89 @@
+{
+  "_id": "workentry-currenttime-cook",
+  "source": {
+    "type": "dataset",
+    "dataset": "currenttime-timetransaction"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["add", "temp_currenttime_timeheader",
+          ["apply-hops", "timeheader", {
+            "datasets": ["currenttime-timeheader currenttime_timeheader"],
+            "where":
+              ["eq", ["string", "_S.timeheaderid"], "currenttime_timeheader._id"]
+            }
+          ]
+        ],
+
+        ["comment",
+          "If the timeheader, employee or subtask was not found, we stop. This can happen since we poll the ",
+          "timestransaction table  more frequently than the timeheader employee or subtask tables. (The content ",
+          "of the those tables rarely change, and it is expensive to query them.). Once the missing timeheader ",
+          "entry appears, this corresponding timetransaction entity will be re-processed, so eventually all ",
+          "will be well."
+        ],
+        ["filter", ["not", ["is-empty", "_T.temp_currenttime_timeheader"]]],
+        ["filter", ["not", ["is-empty", "_T.temp_currenttime_timeheader.currenttime_employee"]]],
+        ["filter", ["not", ["is-empty", "_T.temp_currenttime_timeheader.currenttime_subtask"]]],
+
+        ["add", "is_internal_projecttype", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask.is_internal_projecttype"]],
+
+        ["copy", "note"],
+        ["add", "timetransaction_id", "_S._id"],
+        ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.timedate"]],
+
+        ["comment",
+          "We only keep (at most) one decimal value, to avoid values like '2.5000000'. '2.5' is much more readable, ",
+          "and we almost never have any timeinterval with more granularity that one half hour."
+          ],
+        ["add", "timeworked",
+          ["/",
+            ["integer", ["*", "_S.duration", 10]],
+            ["decimal", 10]]],
+        ["add", "currenttime_subtask_id", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask._id"]],
+
+        ["comment",
+          "Sometimes the username includes a domain, like this: 'bouvet\\knut.johannessen', ",
+          "so we must use the 'split' function to just keep the real username-part."],
+        ["add", "user_name",
+          ["last",
+            ["split", "\\",
+              ["first", "_T.temp_currenttime_timeheader.currenttime_employee.username"]]]],
+
+        ["add", "_id", ["concat", ["list", "_T.user_name", "--", "_T.date", "--", "_T.currenttime_subtask_id"]]],
+
+        ["remove", "temp_*"]
+      ],
+      "timeheader": [
+        ["add", "currenttime_subtask",
+          ["apply-hops", "subtask", {
+            "datasets": ["cooked-currenttime-subtask currenttime_subtask"],
+            "where":
+              ["eq", ["string", "_S.subtaskid"], "currenttime_subtask._id"]
+            }
+          ]
+        ],
+        ["add", "currenttime_employee",
+          ["apply-hops", "employee", {
+            "datasets": ["currenttime-employee currenttime_employee"],
+            "where":
+              ["eq", ["string", "_S.employeeid"], "currenttime_employee._id"]
+            }
+          ]
+        ]
+      ],
+      "subtask": [
+        ["copy", "*"]
+      ],
+      "employee": [
+        ["copy", "*"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

@@ -8,7 +8,7 @@
      "type": "emit_children"
   },
   "pump": {
-    "schedule_interval": 1
+    "schedule_interval": 10
   },
   "type": "pipe"
 }

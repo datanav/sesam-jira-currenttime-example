@@ -14,10 +14,10 @@
             ["replace", "@", " ",
               ["replace", "\n", " ",
                 ["replace", ";", " ",
-                    ["replace", "#", " ",
-                      ["replace", ":", " ",
-                        ["replace", "-{", " ",
-                          ["replace", "{", " ",
+                  ["replace", "#", " ",
+                    ["replace", ":", " ",
+                      ["replace", "-{", " ",
+                        ["replace", "{", " ",
                           ["replace", "}", " ",
                             ["replace", "-[", " ",
                               ["replace", "[", " ",
@@ -27,10 +27,15 @@
                                       ["replace", ")", " ", "_S.note"]]]]]]]]]]]]]]]],
         ["add", "temp_split_note", ["split", " ", "_T.temp_cleaned_note"]],
         ["add", "temp_split_note2", ["map", ["strip", "_."], "_T.temp_split_note"]],
+
+        ["comment",
+          "Filter out strings that looks like JIRA issue keys. A JIRA issue key is on the ",
+          "form '<PROJECT_PKEY>-<ISSUE_NUMBER>'. Example: 'FASIT-42'"],
         ["add", "jira_issue_keys",
           ["filter",
             ["and",
               ["eq", 2, ["count", ["split", "-", "_."]]],
+              ["not", ["is-integer", ["integer", ["nth", 0, ["split", "-", "_."]]]]],
               ["gt", ["integer", ["nth", 1, ["split", "-", "_."]]], 0]
             ],
             "_T.temp_split_note2"]],
@@ -41,7 +46,7 @@
     }
   },
   "pump": {
-    "schedule_interval": 1
+    "schedule_interval": 10
   },
   "type": "pipe"
 }

@@ -1,37 +1,36 @@
 {
-  "_id": "workentry-jira-step3-merge-worklog-entities",
+  "_id": "workentry-total-currenttime-step3-merge-worklog-entities",
   "source": {
     "type": "dataset",
-    "dataset": "workentry-jira-step2-unique_workentry_ids"
+    "dataset": "workentry-total-currenttime-step2-unique-workentry_total_id"
   },
   "transform": {
     "type": "dtl",
     "rules": {
       "default": [
         ["comment",
-          "We iterate over the 'workentry-jira-step2-unique_workentry_ids' dataset and do a hops to ",
-          "'worklog-jira-step1-cook-jira-worklog' to get all the entities ",
+          "We iterate over the 'workentry-total-currenttime-step2-unique-workentry_total_id' dataset and do a hops to ",
+          "'workentry-total-currenttime-step1-cook' to get all the entities ",
           "that should contribute to the final workentry."],
 
         ["copy", "_id"],
         ["add", "temp_worklog_entities",
           ["hops", {
-            "datasets": ["workentry-jira-step1-cook-jira-worklog worklog"],
+            "datasets": ["workentry-total-currenttime-step1-cook worklog"],
             "where":
-              ["eq", "_S._id", "worklog.workentry_id"]
+              ["eq", "_S._id", "worklog.workentry_total_id"]
             }
           ]
         ],
 
         ["comment",
           "By definition, all the matching worklog entities has the same ",
-          "'date', 'user_name' and 'jira_issue_key' attributes, so we ",
+          "'date' and 'user_name' attributes, so we ",
           "can just pick the first value of each."],
         ["add", "date", ["first", "_T.temp_worklog_entities.date"]],
         ["add", "user_name", ["first", "_T.temp_worklog_entities.user_name"]],
-        ["add", "jira_issue_key", ["first", "_T.temp_worklog_entities.jira_issue_key"]],
 
-        ["comment", "Get the total number of hours worked by the user on this task on this date."],
+        ["comment", "Get the total number of hours worked by the user on this date."],
         ["add", "timeworked", ["sum", "_T.temp_worklog_entities.timeworked"]],
 
         ["remove", "temp_*"]

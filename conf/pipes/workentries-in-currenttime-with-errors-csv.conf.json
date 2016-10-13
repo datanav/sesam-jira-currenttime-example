@@ -9,28 +9,19 @@
     "columns": [
       "date",
       "user_name",
-      "note_from_currenttime",
       "errors",
       "timeworked_from_currenttime",
       "timeworked_from_jira",
-      "jira_issue_keys_from_currentime_note",
       "currenttime_subtask",
       "currenttime_task",
       "currenttime_project",
-      "currenttime_projecttype"],
+      "currenttime_projecttype",
+      "note_from_currenttime",
+      "jira_issue_keys_from_currentime_note"
+    ],
     "delimiter": ";",
-    "lineterminator": "\r\n"
-  },
-  "transform": {
-    "type": "dtl",
-    "rules": {
-      "default": [
-        ["if", ["eq", "_S._deleted", false],
-          ["add", "date", "never!"]
-        ],
-        ["copy", "*"]
-      ]
-    }
+    "lineterminator": "\r\n",
+    "skip-deleted-entities": true
   },
   "type": "pipe"
 }
