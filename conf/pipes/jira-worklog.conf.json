@@ -3,7 +3,7 @@
   "source": {
     "system": "jira",
     "type": "sql",
-    "query": "select * from worklog where STARTDATE >= CONVERT(datetime, '20160920 23:59:59')",
+    "query": "select * from worklog where STARTDATE >= CONVERT(datetime, '20160831 23:59:59')",
     "updated_query": "select * from worklog where UPDATED >= :since",
     "primary_key": "ID",
     "updated_column": "UPDATED"
