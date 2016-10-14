@@ -15,18 +15,22 @@
           "so we do a bit of cleanup and annotation here."
         ],
 
-        ["add", "user_name", "_S.user_name"],
-        ["add", "date", "_S.date"],
+        ["add", "Username", "_S.user_name"],
+        ["add", "Date", "_S.date"],
 
 
         ["comment", "Rename and tweak some attributes to make them more end-user readable."],
-        ["add", "errors", ["replace", "\n", " ", ["replace", "\r", " ", ["join", "\\. ", "_S.errors"]]]],
-        ["add", "jira_issue_keys_from_currentime_note",  ["replace", "\n", " ", ["replace", "\r", " ", ["join", ", ", "_S.jira_issue_keys"]]]],
+        ["add", "Errors", ["replace", "\n", " ", ["replace", "\r", " ", ["join", ". ", "_S.errors"]]]],
+        ["add", "JIRA keys",  ["replace", "\n", " ", ["replace", "\r", " ", ["join", ", ", "_S.jira_issue_keys"]]]],
 
-        ["add", "timeworked_from_currenttime", ["concat", ["list", ["string", "_S.timeworked"], "h"]]],
-        ["add", "timeworked_from_jira", ["concat", ["list", ["string", "_S.total_jira_timeworked"], "h"]]],
+        ["comment",
+          "Change attribute names to something more humanreadable and ",
+          "switch from '.' to ',' as decimal separator, since Excel prefers it"],
+        ["add", "JIRA hours", ["replace", ".", ",", ["string", "_S.total_jira_timeworked"]]],
+        ["add", "CT hours", ["replace", ".", ",", ["string", "_S.timeworked"]]],
 
-        ["add", "note_from_currenttime",  ["replace", "\n", " ", ["replace", "\r", " ", "_S.note"]]],
+
+        ["add", "CT note",  ["replace", "\n", " ", ["replace", "\r", " ", "_S.note"]]],
 
         ["comment",
           "Add info about currenttime subtask, task and project."],
@@ -39,10 +43,10 @@
               }
             ]]],
 
-        ["add", "currenttime_subtask", "_T.temp_currenttime_subtask.subtaskname"],
-        ["add", "currenttime_task", "_T.temp_currenttime_subtask.taskname"],
-        ["add", "currenttime_project", "_T.temp_currenttime_subtask.projectname"],
-        ["add", "currenttime_projecttype", "_T.temp_currenttime_subtask.projecttypename"],
+        ["add", "CT subtask", "_T.temp_currenttime_subtask.subtaskname"],
+        ["add", "CT task", "_T.temp_currenttime_subtask.taskname"],
+        ["add", "CT project", "_T.temp_currenttime_subtask.projectname"],
+        ["add", "CT projecttype", "_T.temp_currenttime_subtask.projecttypename"],
 
         ["remove", "temp_*"]
 

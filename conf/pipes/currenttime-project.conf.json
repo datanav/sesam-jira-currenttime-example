@@ -3,8 +3,7 @@
   "source": {
     "system": "currenttime",
     "table": "project",
-    "type": "sql",
-    "updated_column": "updatedate"
+    "type": "sql"
   },
   "pump": {
     "cron_expression": "0 0 * * *"

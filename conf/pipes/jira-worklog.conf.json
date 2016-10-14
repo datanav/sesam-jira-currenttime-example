@@ -9,7 +9,8 @@
     "updated_column": "UPDATED"
   },
   "pump": {
-    "cron_expression": "*/5 * * * *"
+    "cron_expression": "*/5 * * * *",
+    "rescan_cron_expression": "0 0 * * *"
   },
   "type": "pipe"
 }

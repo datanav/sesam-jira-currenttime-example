@@ -4,8 +4,7 @@
     "system": "currenttime",
     "table": "employee",
     "type": "sql",
-    "blacklist": ["pinsalt", "salt", "pincode", "pwd"],
-    "updated_column": "updatedate"
+    "blacklist": ["pinsalt", "salt", "pincode", "pwd"]
   },
   "pump": {
     "cron_expression": "0 0 * * *"

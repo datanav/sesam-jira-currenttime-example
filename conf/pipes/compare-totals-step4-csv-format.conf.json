@@ -1,0 +1,33 @@
+{
+  "_id": "compare-totals-step4-csv-format",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "compare-totals-step3-has-errors-filter"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+
+        ["comment",
+          "Change attribute names to something more humanreadable.",
+          "Switch from '.' to ',' as decimal separator, since Excel prefers it"],
+        ["add", "Date", "_S.date"],
+        ["add", "Username", "_S.user_name"],
+        ["add", "Errors", "_S.errors"],
+
+        ["comment",
+          "Change attribute names to something more humanreadable and ",
+          "switch from '.' to ',' as decimal separator, since Excel prefers it."],
+        ["add", "JIRA hours", ["replace", ".", ",", ["string", "_S.total_timeworked_from_jira"]]],
+        ["add", "CT hours", ["replace", ".", ",", ["string", "_S.total_timeworked_from_currenttime"]]]
+      ]
+
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}

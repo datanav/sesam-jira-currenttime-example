@@ -35,9 +35,11 @@
         ["add", "date", ["datetime-format", "%Y-%m-%d", "_S.timedate"]],
 
         ["comment",
-          "Trick the decimal to loose trailing zeros, to avoid values like '2.5000000'. '2.5' is much more readable."
+          "Cast from Decimal to float to get rid of trailing zeros after the decimal point.",
+          "This is a bit of a hack and should be fixed."
           ],
-        ["add", "timeworked", ["*", "_S.duration", 1]],
+        ["add", "timeworked", ["decimal", ["float", "_S.duration"]]],
+
         ["add", "currenttime_subtask_id", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask._id"]],
 
         ["comment",

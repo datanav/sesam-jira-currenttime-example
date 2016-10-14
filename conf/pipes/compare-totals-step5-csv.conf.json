@@ -1,8 +1,8 @@
 {
-  "_id": "workentries-in-currenttime-with-errors-csv",
+  "_id": "compare-totals-step5-csv",
   "source": {
     "type": "dataset",
-    "dataset": "workentries-in-currenttime-with-errors"
+    "dataset": "compare-totals-step4-csv-format"
   },
   "sink": {
     "type": "csv_endpoint",
@@ -10,14 +10,8 @@
       "Date",
       "Username",
       "Errors",
-      "CT hours",
       "JIRA hours",
-      "CT subtask",
-      "CT task",
-      "CT project",
-      "CT projecttype",
-      "CT note",
-      "JIRA keys"
+      "CT hours"
     ],
     "delimiter": ";",
     "lineterminator": "\r\n",

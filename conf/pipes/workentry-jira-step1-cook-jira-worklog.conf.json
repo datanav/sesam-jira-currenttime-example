@@ -13,6 +13,12 @@
         ["comment", "Convert to hours."],
         ["add", "timeworked", ["/", ["decimal", "_S.timeworked"], 3600]],
 
+        ["comment",
+          "Cast from Decimal to float and back to get rid of trailing zeros after the decimal point.",
+          "This is a bit of a hack and should be fixed."
+          ],
+        ["add", "timeworked", ["decimal", ["float", "_T.timeworked"]]],
+
         ["comment", "In the 'jira-worklog' dataset the issueid is a float, for some reason"],
         ["add", "issueid", ["string", "_S.issueid"]],
 
