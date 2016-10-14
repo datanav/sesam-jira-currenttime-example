@@ -1,14 +1,18 @@
-# JIRA/CurrentTime example
+JIRA/CurrentTime example
+========================
 
 This is an example project that uses SESAM to compare the hours logged in JIRA and in CurrentTime.
 
-##Overview
+Overview
+--------
 In Bouvet the consultants often have to log hours in two systems:
 
-JIRA:
+**JIRA:**
+
 This is a bug/task tracking system. Here the consultants log how many hours they spent on each bug/task.
 
-CurrentTime:
+**CurrentTime:**
+
 This is an time-tracking system. Here the consultants log how many hours they used on each project. 
 
 The norm in Bouvet is that CurrentTime is used to bill the customers, so it is important that all 
@@ -26,7 +30,7 @@ each other in any way. We must therefore do it in a more 'un-official' way.
 
 One commonly used method is to type in the JIRA issue-key when logging hours in CurrentTime, like this:
 
-![CurrentTime note with a reference to a JIRA issue](currentime_note_with_jira_issue_key.png)
+.. image:: ./currentime_note_with_jira_issue_key.png
 
 In this case we want to find all CurrentTime worklog entries that refer to one or
 more JIRA-issues and check that the number of hours in the CurremtTime worklog entry matches the 
@@ -39,9 +43,12 @@ tasks ("Lunch", "Doctors appointment", etc).
 
   
 
-## Implementation details / logic
+Implementation details / logic
+------------------------------
 
-### Data import ("jira-*" and "currenttime-*")
+
+Data import ("jira-*" and "currenttime-*")
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 SESAM connects directly to the JIRA and CurrentTime databases. 
 
@@ -57,10 +64,11 @@ SESAM's information is reasonably up-to-date. The other "jira-*" and "currenttim
 per hour, since the data in the corresponding tables changes much more rarely (and we don't want to
 spam the database servers with unnecessary queries). 
 
-### Cooking the raw data ("cooked-*")
+Cooking the raw data (cooked-\*)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For some of the source-tables we want to add a bit of denormalized information. This is done by the
-"cooked-*" pipes:
+"cooked-\*" pipes:
 
 "cooked-jira-jiraissue": 
 Adds a "jira_issue_key" attribute with the JIRA-key of the jira-issue by doing a lookup in the "jira-project"
@@ -75,7 +83,8 @@ Adds "taskname", "projectname" and "projecttypename" attributes by doing lookups
 "currenttime-task" and "cooked-currenttime-project" datasets.
 
 
-### Creating "workentry-currenttime"
+Creating "workentry-currenttime"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
 In this flow we want to take the raw data and create a dataset with one entity for each user+day+currentime_subtask
 combination. The "_id" attribute of the resulting entities are on the form "<user_name>--<date>--<currenttime_subtask_id>".
@@ -89,7 +98,8 @@ JIRA-task ("Lunch", "Doctor's appointment", etc). This is done by checking if th
 currenttime-subtask exists in the hardcoded "config-internal-projecttype-names" dataset.
 
 
-### Creating "workentry-jira"
+Creating "workentry-jira"
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this flow we want to take the raw data and create a dataset with one entity for each user+day+jira_issue
 combination. This is tricker than for "workentry-currenttime", since there can be multiple entries in 
@@ -116,7 +126,8 @@ the "workentry-jira-step1-cook-jira-worklog" dataset where the "workentry_id" at
 "_id" from the source entity. Then it calculates the total number of hours from all those entities.
 
 
-### Creating "workentry-total-currenttime"
+Creating "workentry-total-currenttime"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this flow we want to create a dataset where each entity represents all the work one user has logged
 per day in currenttime, across all currenttime projects and tasks. We do this in a similar way to the
@@ -135,7 +146,8 @@ Reads from "workentry-total-currenttime-step2-unique-workentry_total_id" and loo
 of the source entity. Store the sum of the time worked.
 
 
-### Creating "workentry-total-jira"
+Creating "workentry-total-jira"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this flow we want to create a dataset where each entity represents all the work one user has logged
 per day in JIRA, across all JIRA issues. The procedure is identical to how "workentry-total-currenttime"
@@ -144,11 +156,13 @@ dataset for each user_name+date combination. The results end up in the "workentr
 dataset.
 
 
-### Finding errors in currenttime worklog entries with JIRA-keys
+Finding errors in currenttime worklog entries with JIRA-keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TODO
 
-### Finding errors in the total number of hours in JIRA and CurrentTime
+Finding errors in the total number of hours in JIRA and CurrentTime
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As a rule, the total number of hours in JIRA and in CurrentTime (minus hours on internal projects) should match.
 To check this we compare the entities in the "workentry-total-jira-step3-merge" and "workentry-total-currenttime-step3-merge"
@@ -163,11 +177,13 @@ datasets.
 
 
 
-## How to run the SESAM installation
+How to run the SESAM installation
+---------------------------------
 
 TODO
 
-## Output
+Output
+------
 
 The csv-file that contains the errors in CurrentTime entries that refer to JIRA-tasks is served on this url: 
 
@@ -178,7 +194,7 @@ The csv-file that contains the errors in CurrentTime entries that refer to JIRA-
 The csv-file that contains the mismatches between total number or hours logged in JIRA and in CurrentTime
 is served on this url: 
 
-  `http://localhost:9042/api/publishers/compare-totals-step4-csv/csv`
+  `http://localhost:9042/api/publishers/compare-totals-step5-csv`
 
 
 This file can be retrieved by pasting the url into a web-browser. Alternativly, it can be downloaded with a commandline tool:
