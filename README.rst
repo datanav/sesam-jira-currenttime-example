@@ -1,7 +1,13 @@
+========================
 JIRA/CurrentTime example
 ========================
 
 This is an example project that uses SESAM to compare the hours logged in JIRA and in CurrentTime.
+
+.. contents:: Table of Contents
+   :depth: 2
+   :local:
+
 
 Overview
 --------
@@ -23,10 +29,15 @@ This causes problems, since it is time-consuming and error-prone to manually mak
 number of hours in JIRA and CurrentTime matches up.
 
 We therefore want to automate this process.
- 
-First, we need some way to connect the hours in JIRA with the hours in CurrentTime. There are no 
-built-in way to doing this in JIRA or CurrentTime; the two systems do not communicate directly with 
-each other in any way. We must therefore do it in a more 'un-official' way. 
+
+The simplest check is to make sure that the total number of hours for each user and date is the same
+in JIRA and in CurrentTime (not including entries in CurrentTime that are never connected to JIRA
+tasks ("Lunch", "Doctors appointment", etc). This is straight forward, but it is not a very finegrained
+approach. Ideally, we would like to be able to figure out which CurrentTime Subtask should be used to log
+the hours in each JIRA-issue. Unfortunatly, there is no built-in way to doing this in JIRA or CurrentTime;
+the two systems do not communicate directly with each other in any way. 
+
+We must therefore connect JIRA-issues with CurrentTime subtasks it in a more 'un-official' way. 
 
 One commonly used method is to type in the JIRA issue-key when logging hours in CurrentTime, like this:
 
@@ -37,14 +48,19 @@ more JIRA-issues and check that the number of hours in the CurremtTime worklog e
 total number of hours logged in the JIRA issues during that same day.
   
   
-Another check is to make sure that the total number of hours for each user and date is the same
-in JIRA and in CurrentTime (not including entries in CurrentTime that are never connected to JIRA
-tasks ("Lunch", "Doctors appointment", etc).
-
-  
 
 Implementation details / logic
 ------------------------------
+
+The goal is to end up with two cvs files:
+
+**"workentries-in-currenttime-with-errors.csv"**:
+
+TODO: describe this
+
+**"compare-totals.csv":**
+
+TODO: describe this
 
 
 Data import ("jira-*" and "currenttime-*")
@@ -185,16 +201,14 @@ TODO
 Output
 ------
 
-The csv-file that contains the errors in CurrentTime entries that refer to JIRA-tasks is served on this url: 
-
-  `http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv`
-
+The csv-file that contains the errors in CurrentTime entries that refer to JIRA-tasks is served on this url:
+   `http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv`
 
 
 The csv-file that contains the mismatches between total number or hours logged in JIRA and in CurrentTime
-is served on this url: 
+is served on this url:
 
-  `http://localhost:9042/api/publishers/compare-totals-step5-csv`
+   `http://localhost:9042/api/publishers/compare-totals-step5-csv`
 
 
 This file can be retrieved by pasting the url into a web-browser. Alternativly, it can be downloaded with a commandline tool:
