@@ -245,7 +245,12 @@ Open a terminal and go to the "sesam-jira-currenttime-example/conf" folder. Run 
     $ sesam put-env-vars environment_variables.json
     $ sesam import .
 
-That is all that is required. SESAM will eventually create  
+That is all that is required. The csv-files will eventually be available. However, some of the pipes only
+run once per day, since some of the data that rarely changes in JIRA and CurrentTime. To avoid having to
+wait for several hours, you should use the management studio (which is running on `<http://localhost:9042/>`_)
+to start all the pipes with ids that starts with "jira-" or "currenttime-". Depending on the amount of data
+some of the pipes can take a long to run (minutes or hours).
+
 
 Output
 ------
