@@ -11,6 +11,10 @@ This is an example project that uses SESAM to compare the hours logged in JIRA a
 
 Overview
 --------
+
+The problem
+~~~~~~~~~~~
+
 In Bouvet the consultants often have to log hours in two systems:
 
 **JIRA:**
@@ -32,7 +36,7 @@ We therefore want to automate this process.
 
 The simplest check is to make sure that the total number of hours for each user and date is the same
 in JIRA and in CurrentTime (not including entries in CurrentTime that are never connected to JIRA
-tasks ("Lunch", "Doctors appointment", etc). This is straight forward, but it is not a very finegrained
+tasks ("Lunch", "Doctors appointment", etc). This is straight forward, but it is not a very fine-grained
 approach. Ideally, we would like to be able to figure out which CurrentTime Subtask should be used to log
 the hours in each JIRA-issue. Unfortunatly, there is no built-in way to doing this in JIRA or CurrentTime;
 the two systems do not communicate directly with each other in any way. 
@@ -47,21 +51,42 @@ In this case we want to find all CurrentTime worklog entries that refer to one o
 more JIRA-issues and check that the number of hours in the CurremtTime worklog entry matches the 
 total number of hours logged in the JIRA issues during that same day.
   
-  
+The solution
+~~~~~~~~~~~~  
+
+The solution to the problem is to have SESAM create cvs files that list the discrepancies between
+JIRA and CurrentTime. CSV-files are a nice format because they can be easily imported into 
+MSExcel and manipulated (sorted, filtered, etc) by non-technical people. We can therefore get away 
+with not implementing any GUI ourselves, since Excel can do everything we need.
+
+We currently produce two CVS-files. They are both semi-colon separated, and uses UTF-8 character
+encoding.
+
+**"compare-totals.csv"**
+
+This file lists the differences between the total number of hours in JIRA and CurrentTime. There is one
+line for each user+date combination. The file looks like this::
+
+    Date;Username;Errors;JIRA hours;CT hours
+    2016-10-10;jon.snow;The total number of hours logged in CurrentTime and JIRA are not identical. JIRA: 5 hours. CurrentTime: 7.5 hours;5;7,5
+    2016-09-28;gregor.clegane;The total number of hours logged in CurrentTime and JIRA are not identical. JIRA: 4 hours. CurrentTime: 12 hous;1;7
+    ...
+
+**"workentries-in-currenttime-with-errors.csv"**:
+
+This file lists problems for CurrentTime entries that refer to a jira issue-key ("SSD-123", IS-456", etc).
+The file looks like this::
+
+    Date;Username;Errors;CT hours;JIRA hours;CT subtask;CT task;CT project;CT projecttype;CT note;JIRA keys
+    2016-10-05;jon.snow;No hours has been logged in JIRA for this JIRA-issue: BKKI-12345;6,5;0;konsulentbistand;Forvaltning;BKK forvaltning (5896);Eksterne kunder løpende timer;BKKI-12345;BKKI-12345
+    2016-09-23;gregor.clegane;The 'note'-field in CurrentTime refer to this non-existing JIRA-issue: SA-12345;2;0;Appl.Forv. - Løpende;Appliksasjonsforvaltning;Alere (6890) Forvaltning/Drift/Overvåkning;Eksterne kunder Forvaltning;SA-12345;SA-12345
+    2016-10-10;gregor.clegane;The hours logged in CurrentTime and JIRA are not identical. JIRA: 5 hours. CurrentTime: 7.5 hours;7,5;5;Utvikling Sesam-ansatte;Utvikling;Sesam Utvikling (8885);Interne kunder løpende timer;IS-12345;IS-12345
+
 
 Implementation details / logic
 ------------------------------
 
-The goal is to end up with two cvs files:
-
-**"workentries-in-currenttime-with-errors.csv"**:
-
-TODO: describe this
-
-**"compare-totals.csv":**
-
-TODO: describe this
-
+This section contains a detailed description on how we use SESAM to produce the CSV files.
 
 Data import ("jira-*" and "currenttime-*")
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,28 +143,16 @@ Creating "workentry-jira"
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this flow we want to take the raw data and create a dataset with one entity for each user+day+jira_issue
-combination. This is tricker than for "workentry-currenttime", since there can be multiple entries in 
+combination. This is a bit tricker than for "workentry-currenttime", since there can be multiple entries in 
 "jira-worklog" for each jira-issue for the same day.
 
 We must therefore do this operation in several steps. These are implemented in the "workentry-jira-step*"
-pipes, where each pipe reads the input from the previous step.
+pipes, where each pipe reads the input from the previous step:
 
-"workentry-jira-step1-cook-jira-worklog":
-Reads from "jira-worklog" and adds various extra attributes ("user_name", "jira_issue_key", etc).
-It also adds a "workentry_id" attribute. This contains a string on the form "<user_name>--<date>--<jira_issue_key>". 
-This string will becode the "_id" value of the entities in the final "worklog-jira" dataset.
+#. `workentry-jira-step1-cook-jira-worklog <./conf/pipes/workentry-jira-step1-cook-jira-worklog.conf.json>`_
+#. `workentry-jira-step2-unique_workentry_ids <./conf/pipes/workentry-jira-step2-unique_workentry_ids.conf.json>`_
+#. `workentry-jira-step3-merge-worklog-entities  <./conf/pipes/workentry-jira-step3-merge-worklog-entities.conf.json>`_
 
-"workentry-jira-step2-unique_workentry_ids":
-Reads from the "workentry-jira-step1-cook-jira-worklog" dataset and creates entities with "_id" set 
-to the "workentry_id" attribute that was created in the previous step. This has the effect of creating 
-as dataset with one entity per user+day+jira_issue combination; if this pipe produces more than one
-entity with the same "_id" (which happens if the user has several work-log entries on the JIRA-issue for
-the same day), each duplicate entity will just overwrite the previous version of the entity.
-  
-"workentry-jira-step3-merge-worklog-entities":
-Reads from the "workentry-jira-step2-unique_workentry_ids" dataset and looks up all the entities from 
-the "workentry-jira-step1-cook-jira-worklog" dataset where the "workentry_id" attribute matches the
-"_id" from the source entity. Then it calculates the total number of hours from all those entities.
 
 
 Creating "workentry-total-currenttime"
@@ -147,19 +160,11 @@ Creating "workentry-total-currenttime"
 
 In this flow we want to create a dataset where each entity represents all the work one user has logged
 per day in currenttime, across all currenttime projects and tasks. We do this in a similar way to the
-"workentry-jira" flow:
+"workentry-jira" flow, with three pipes:
 
-"workentry-total-currenttime-step1-cook":
-Reads from "workentry-currenttime" and adds a "workentry_total_id" that is on the form "<user_name>--<date>". 
-
-"workentry-total-currenttime-step2-unique-workentry_total_id":
-Reads from "workentry-total-currenttime-step1-cook" and creates entities with the "_id" set to the value
-of the "workentry_total_id" attribute that was created in the previous step.
-
-"workentry-total-currenttime-step3-merge":
-Reads from "workentry-total-currenttime-step2-unique-workentry_total_id" and looks up all the entities in
-"workentry-total-currenttime-step1" where the "workentry_total_id" attribute matches the "_id" attribute 
-of the source entity. Store the sum of the time worked.
+#. `workentry-total-currenttime-step1-cook <./conf/pipes/workentry-total-currenttime-step1-cook.conf.json>`_
+#. `workentry-total-currenttime-step2-unique-workentry_total_id <./conf/pipes/workentry-total-currenttime-step2-unique-workentry_total_id.conf.json>`_
+#. `workentry-total-currenttime-step3-merge <./conf/pipes/workentry-total-currenttime-step3-merge.conf.json>`_
 
 
 Creating "workentry-total-jira"
@@ -167,15 +172,31 @@ Creating "workentry-total-jira"
 
 In this flow we want to create a dataset where each entity represents all the work one user has logged
 per day in JIRA, across all JIRA issues. The procedure is identical to how "workentry-total-currenttime"
-is created, so we won't re-hash the details here. In short, we aggregate the values in the "workentry-jira"
-dataset for each user_name+date combination. The results end up in the "workentry-total-jira-step3-merge"
-dataset.
+is created; We aggregate the values in the "workentry-jira" dataset for each user_name+date combination, using
+three pipes:
+
+#. `workentry-total-jira-step1-cook <./conf/pipes/workentry-total-jira-step1-cook.conf.json>`_
+#. `workentry-total-jira-step2-unique-workentry_total_id <./conf/pipes/workentry-total-jira-step2-unique-workentry_total_id.conf.json>`_
+#. `workentry-total-jira-step3-merge <./conf/pipes/workentry-total-jira-step3-merge.conf.json>`_
+
+The results end up in the "workentry-total-jira-step3-merge" dataset.
 
 
 Finding errors in currenttime worklog entries with JIRA-keys
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TODO
+This is done by the "workentry-currenttime-with-jira-keys-step*" pipes. 
+
+#. `workentry-currenttime-with-jira-keys-step1-note-filter <./conf/pipes/workentry-currenttime-with-jira-keys-step1-note-filter.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step2-jiraissue-keys <./conf/pipes/workentry-currenttime-with-jira-keys-step2-jiraissue-keys.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter <./conf/pipes/workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children <./conf/pipes/workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children <./conf/pipes/workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step6-lookup-jira-hours <./conf/pipes/workentry-currenttime-with-jira-keys-step6-lookup-jira-hours.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step7-compare-hours <./conf/pipes/workentry-currenttime-with-jira-keys-step7-compare-hours.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step8-has-errors-filter <./conf/pipes/workentry-currenttime-with-jira-keys-step8-has-errors-filter.conf.json>`_
+
+
 
 Finding errors in the total number of hours in JIRA and CurrentTime
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,42 +207,73 @@ datasets and check that the number of hours are the same in both.
 
 This check is done by the following pipes:
 
-"compare-totals-step1-merge":
-This pipe uses the "merge_dataset" source to gather corresponding entities from the 
-"workentry-total-jira-step3-merge" and "workentry-total-currenttime-step3-merge"
-datasets. 
+#. `compare-totals-step1-merge <./conf/pipes/compare-totals-step1-merge.conf.json>`_. 
+   This pipe uses the "merge_dataset" source to gather corresponding entities from the 
+   "workentry-total-jira-step3-merge" and "workentry-total-currenttime-step3-merge"
+   datasets. 
+#. `compare-totals-step2-compare-hours <./conf/pipes/compare-totals-step2-compare-hours.conf.json>`_
+#. `compare-totals-step3-has-errors-filter <./conf/pipes/compare-totals-step3-has-errors-filter.conf.json>`_
+#. `compare-totals-step4-csv-format <./conf/pipes/compare-totals-step4-csv-format.conf.json>`_
+#. `compare-totals-step5-csv <./conf/pipes/compare-totals-step5-csv.conf.json>`_.
+   This pipe publishes the dataset of the previous pipe as a CSV-file at this url:
+   `<http://localhost:9042/api/publishers/compare-totals-step5-csv/csv>`_
 
 
 
 How to run the SESAM installation
 ---------------------------------
 
-TODO
+If you haven't already done so, go to the `Sesam Portal website <https://portal.sesam.in>`_ and follow the instructions
+there to get a SESAM instance up and running.
+
+Then, install the SESAM commandline client as described `here <https://docs.sesam.io/overview.html#getting-started>`_.
+
+The trickiest part of running this SESAM installation is that you need to have a database user account with
+read-permissions to both the JIRA and CurrentTime databases. You will have to talk to the person(s) administering
+the JIRA and CurrentTime installations you want to connect to. 
+
+Once you have gotten usernames and passwords for the JIRA and CurrentTime databases you can fill in
+the placeholder values in these files:
+
+`<./conf/environment_variables.json>`_
+
+`<./conf/secrets.json>`_
+
+Open a terminal and go to the "sesam-jira-currenttime-example/conf" folder. Run the following commands::
+
+    $ sesam put-secrets secrets.json
+    $ sesam put-env-vars environment_variables.json
+    $ sesam import .
+
+That is all that is required. SESAM will eventually create  
 
 Output
 ------
 
 The csv-file that contains the errors in CurrentTime entries that refer to JIRA-tasks is served on this url:
-   `http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv`
+
+   `<http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv>`_
 
 
 The csv-file that contains the mismatches between total number or hours logged in JIRA and in CurrentTime
 is served on this url:
 
-   `http://localhost:9042/api/publishers/compare-totals-step5-csv`
+   `<http://localhost:9042/api/publishers/compare-totals-step5-csv/csv>`_
 
 
-This file can be retrieved by pasting the url into a web-browser. Alternativly, it can be downloaded with a commandline tool:
+This files can be retrieved by opening the url in a web-browser. Some web-browsers will just download the csv-file 
+to your "Downloads" folder, others will display the content of the file. 
 
-On Linux, open a terminal and run this command:
-   `curl -o errors.csv "http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv"`
+The files can of course also be downloaded with a commandline tool:
 
-On Windows, start PowerShell and run this command: 
-  `Invoke-WebRequest -Uri "http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv"  -OutFile errors.csv`
+On Linux, open a terminal and run this command::
+   
+   curl -o errors.csv "http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv"
+
+On Windows, start PowerShell and run this command::
+
+   Invoke-WebRequest -Uri "http://localhost:9042/api/publishers/workentries-in-currenttime-with-errors-csv/csv"  -OutFile errors.csv
 
   
-The resulting cvs-file is fairly big and human unfriendly, but a good way to view it is to open the file in Microsoft Excel and
-use Excel's functionality to do searching, filtering and sorting.  
-
-
-
+The cvs-files are fairly big and human unfriendly, but a good way to view them is to open the files in Microsoft Excel and
+use Excel's functionality to do searching, filtering and sorting.

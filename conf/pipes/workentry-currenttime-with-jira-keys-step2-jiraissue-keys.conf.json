@@ -9,6 +9,12 @@
     "rules": {
       "default": [
         ["copy", "*"],
+
+        ["comment",
+          "Parse the 'note'-field and extract strings that looks like JIRA issue keys. A JIRA issue key is on the ",
+          "form '<PROJECT_PKEY>-<ISSUE_NUMBER>'. Example: 'FASIT-42'"
+        ],
+
         ["add", "temp_cleaned_note",
           ["replace", ",", " ",
             ["replace", "@", " ",
@@ -30,9 +36,6 @@
         ["add", "temp_split_note", ["split", " ", "_T.temp_cleaned_note"]],
         ["add", "temp_split_note2", ["map", ["strip", "_."], "_T.temp_split_note"]],
 
-        ["comment",
-          "Filter out strings that looks like JIRA issue keys. A JIRA issue key is on the ",
-          "form '<PROJECT_PKEY>-<ISSUE_NUMBER>'. Example: 'FASIT-42'"],
         ["add", "jira_issue_keys",
           ["filter",
             ["and",

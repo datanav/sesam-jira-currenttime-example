@@ -8,7 +8,8 @@
     "type": "dtl",
     "rules": {
       "default": [
-        ["comment", "filter out entities without a note"],
+        ["comment",
+          "Filters out all the CurrentTime entries that doesn't have a 'note'-field value."],
         ["filter",
           ["and",
             ["not", ["is-null", "_S.note"]],

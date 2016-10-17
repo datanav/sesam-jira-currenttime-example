@@ -12,7 +12,7 @@
 
         ["comment",
           "Create the id of the 'workentry-total-currenttime' entity that this entity will eventually ",
-          "contribute to."
+          "contribute to. The id is not the form '<user_name>--<date>'."
         ],
         ["add", "workentry_total_id", ["concat", ["list", "_S.user_name", "--", "_S.date"]]]
       ]

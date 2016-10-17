@@ -9,9 +9,14 @@
     "rules": {
       "default": [
         ["comment",
-          "We use the '_S.workentry_id' as the '_id', in order to get a list of unique workentry ids. The next step ",
-          "will read this dataset and do hops to 'worklog-jira-step1-cook-jira-worklog' to get all the entities ",
-          "that should contribute to the final workentry."],
+          "Reads from the 'workentry-jira-step1-cook-jira-worklog' dataset and creates entities with '_id' set ",
+          "to the 'workentry_id' attribute that was created in the previous step. This has the effect of creating ",
+          "a dataset with one entity per user+day+jira_issue combination; if this pipe produces more than one ",
+          "entity with the same '_id' (which happens if the user has several work-log entries on the JIRA-issue for ",
+          "the same day), each duplicate entity will just overwrite the previous version of the entity.",
+          
+          "The next pipe in this flow will read this dataset and do hops to 'worklog-jira-step1-cook-jira-worklog' ",
+          "to get all the entities that should contribute to the final workentry."],
         ["add", "_id", "_S.workentry_id"]
       ]
     }

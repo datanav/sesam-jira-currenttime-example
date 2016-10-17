@@ -8,6 +8,13 @@
     "type": "dtl",
     "rules": {
       "default": [
+        ["comment", 
+          "This pipes reads from 'jira-worklog' and adds various extra attributes ('user_name', ",
+          "'jira_issue_key', etc). It also adds a 'workentry_id' attribute. This contains a string ",
+          "on the form '<user_name>--<date>--<jira_issue_key>'. ",
+          "This string will become the '_id' value of the entities in the final 'worklog-jira' dataset."
+        ],
+        
         ["copy", "_id"],
 
         ["comment", "Convert to hours."],

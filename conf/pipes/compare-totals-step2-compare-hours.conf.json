@@ -9,6 +9,11 @@
     "type": "dtl",
     "rules": {
       "default": [
+        ["comment",
+         "This  pipe compares the number of hours in JIRA and CurrentTime and creates an appropirate errormessage ",
+         "if needed."
+        ],
+
         ["copy", "_id"],
 
         ["add", "total_timeworked_from_currenttime", "_S.workentry-total-currenttime-step3-merge.timeworked"],

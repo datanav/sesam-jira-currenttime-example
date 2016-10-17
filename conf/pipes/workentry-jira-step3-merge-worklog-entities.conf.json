@@ -9,9 +9,11 @@
     "rules": {
       "default": [
         ["comment",
-          "We iterate over the 'workentry-jira-step2-unique_workentry_ids' dataset and do a hops to ",
-          "'worklog-jira-step1-cook-jira-worklog' to get all the entities ",
-          "that should contribute to the final workentry."],
+          "Reads from the 'workentry-jira-step2-unique_workentry_ids' dataset and looks up all the entities from ",
+          "the 'workentry-jira-step1-cook-jira-worklog' dataset where the 'workentry_id' attribute matches the ",
+          "'_id' from the source entity. These are the entities  that should contribute to the final workentry. ",
+          "Then it calculates the total number of hours from all those entities."
+        ],
 
         ["copy", "_id"],
         ["add", "temp_worklog_entities",
