@@ -16,7 +16,6 @@
       "CT task",
       "CT project",
       "CT projecttype",
-      "CT note",
       "JIRA keys"
     ],
     "delimiter": ";",
