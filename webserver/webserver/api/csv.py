@@ -81,9 +81,9 @@ def compare_totals():
                            )
 
 
-def workentries_in_currenttime_with_errors():
+def currenttime_with_jira_keys():
     return _serve_csv_file(doctype="workentry-currenttime-with-jira-keys",
-                           filename="workentries-in-currenttime-with-errors.csv",
+                           filename="currenttime-with-jira-keys.csv",
                            fieldmapping=collections.OrderedDict([
                                ("Date", "date"),
                                ("Username", "user_name"),

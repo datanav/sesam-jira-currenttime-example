@@ -22,9 +22,9 @@ paths:
         200:
           description: OK
     
-  /workentries-in-currenttime-with-errors.csv:
+  /currenttime-with-jira-keys.csv:
     get:
-      operationId: api.csv.workentries_in_currenttime_with_errors
+      operationId: api.csv.currenttime_with_jira_keys
       produces:
         - text/csv
       responses:
