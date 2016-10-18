@@ -42,18 +42,13 @@
 
         ["add", "currenttime_subtask_id", ["first", "_T.temp_currenttime_timeheader.currenttime_subtask._id"]],
 
-        ["comment",
-          "Sometimes the username includes a domain, like this: 'bouvet\\knut.johannessen', ",
-          "so we must use the 'split' function to just keep the real username-part."],
-        ["add", "user_name",
-          ["last",
-            ["split", "\\",
-              ["first", "_T.temp_currenttime_timeheader.currenttime_employee.username"]]]],
+        ["add", "user_name", ["first", "_T.temp_currenttime_timeheader.currenttime_employee.user_name"]],
 
         ["add", "_id", ["concat", ["list", "_T.user_name", "--", "_T.date", "--", "_T.currenttime_subtask_id"]]],
 
         ["remove", "temp_*"]
       ],
+
       "timeheader": [
         ["add", "currenttime_subtask",
           ["apply-hops", "subtask", {
@@ -65,7 +60,7 @@
         ],
         ["add", "currenttime_employee",
           ["apply-hops", "employee", {
-            "datasets": ["currenttime-employee currenttime_employee"],
+            "datasets": ["cooked-currenttime-employee currenttime_employee"],
             "where":
               ["eq", ["string", "_S.employeeid"], "currenttime_employee._id"]
             }

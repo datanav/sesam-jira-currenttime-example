@@ -1,0 +1,34 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: CT and JIRA hours checker
+paths:
+  /:
+    get:
+      operationId: api.root.index
+      produces:
+        - text/html
+      responses:
+        200:
+          description: OK
+
+  /compare-totals.csv:
+    get:
+      operationId: api.csv.compare_totals
+      produces:
+        - text/csv
+      responses:
+        200:
+          description: OK
+    
+  /workentries-in-currenttime-with-errors.csv:
+    get:
+      operationId: api.csv.workentries_in_currenttime_with_errors
+      produces:
+        - text/csv
+      responses:
+        200:
+          description: OK
+
+            

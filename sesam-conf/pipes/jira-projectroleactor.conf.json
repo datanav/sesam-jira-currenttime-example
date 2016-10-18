@@ -1,0 +1,12 @@
+{
+  "_id": "jira-projectroleactor",
+  "source": {
+    "system": "jira",
+    "table": "projectroleactor",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

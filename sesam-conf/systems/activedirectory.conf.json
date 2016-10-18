@@ -1,0 +1,7 @@
+{
+  "_id": "activedirectory",
+  "host": "$ENV(activedirectory-host)",
+  "password": "$SECRET(activedirectory-password)",
+  "type": "system:ldap",
+  "username": "$SECRET(activedirectory-username)"
+}

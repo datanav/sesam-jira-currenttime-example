@@ -67,6 +67,12 @@
               " hours"
             ]]]]],
 
+        ["comment",
+          "join the temporary lists into strings."
+        ],
+        ["add", "errors", ["replace", "\n", " ", ["replace", "\r", " ", ["join", ". ", "_T.errors"]]]],
+        ["add", "jira_issue_keys",  ["replace", "\n", " ", ["replace", "\r", " ", ["join", ", ", "_T.jira_issue_keys"]]]],
+
         ["remove", "temp_*"]
       ]
     }

@@ -1,8 +1,8 @@
 {
-  "_id": "workentries-in-currenttime-with-errors-csv",
+  "_id": "workentry-currenttime-with-jira-keys-step11-csv",
   "source": {
     "type": "dataset",
-    "dataset": "workentries-in-currenttime-with-errors"
+    "dataset": "workentry-currenttime-with-jira-keys-step10-csv-format"
   },
   "sink": {
     "type": "csv_endpoint",

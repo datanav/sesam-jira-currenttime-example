@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>JIRA/Currenttime checker</title>
+</head>
+<body>
+    <p>Welcome to the experimental JIRA/Currenttime checker!</p>
+    <p>
+        In brief, this checker compares the hours logged in JIRA and CurrentTime and reports any discrepancies
+        it finds. The checks are described in detail at
+        <a href="https://github.com/sesam-io/sesam-jira-currenttime-example">https://github.com/sesam-io/sesam-jira-currenttime-example</a>.
+
+    </p>
+
+    <p>
+        If you just want to look at the result of the checks, download the CSV-files below (The links are not
+        to actual physical files, but to a webserver that filters the results so that you only see stuff
+        that is relevant to you):
+    </p>
+
+    <ul>
+        <li>
+            <a href="compare-totals.csv">compare-totals.csv</a>
+            <div>
+                This CSV-file displays the differences between the total number of hours logged in JIRA and the
+                total number of hours logged in CurrentTime.
+            </div>
+        </li>
+        <li>
+            <a href="workentries-in-currenttime-with-errors.csv">workentries-in-currenttime-with-errors.csv</a>
+            <div>
+                This CSV-file displays problems with CurrentTime entries that refer to JIRA-issues in
+                the "Note" field.
+            </div>
+        </li>
+    </ul>
+    <p>
+        The CSV-files are updated roughly every 5 minutes. Some changes will take longer to appear:<br />
+        New JIRA-tasks takes roughly an hour to appear.<br />
+        CurrentTime projects, tasks and subtasks are refreshed nightly, so a new subtask will normally not  be
+        available until the next day.
+    </p>
+
+    <p>
+        A good way to view the CSV-files are to import them in MS Excel. You can create such a file yourself, or
+        download the one below. This Excel file has two worksheets that each link to one of the CSV-files described
+        above. (Use the "Data"=>"Refresh all" button in Excel to see the latest data.)
+    </p>
+    <ul>
+        <li>
+            <a href="static/jira-currenttime.xlsx">jira-currenttime.xlsx</a>
+        </li>
+    </ul>
+
+
+</body>
+</html>

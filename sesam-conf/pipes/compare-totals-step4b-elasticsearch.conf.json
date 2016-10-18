@@ -1,0 +1,17 @@
+{
+  "_id": "compare-totals-step4b-elasticsearch",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "compare-totals-step3-has-errors-filter"
+  },
+  "sink": {
+    "type": "elasticsearch",
+    "system": "elasticsearch",
+    "default_type": "compare-totals",
+    "default_index": "jira-currentime"
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}

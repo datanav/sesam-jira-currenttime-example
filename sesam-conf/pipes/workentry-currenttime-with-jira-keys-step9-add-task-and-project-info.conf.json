@@ -1,0 +1,42 @@
+{
+  "_id": "workentry-currenttime-with-jira-keys-step9-add-task-and-project-info",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-with-jira-keys-step8-has-errors-filter"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+
+        ["copy", "*"],
+
+        ["comment",
+          "Add info about currenttime subtask, task and project."],
+        ["add", "temp_currenttime_subtask",
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-subtask currenttime_subtask"],
+              "where":
+                ["eq", ["string", "_S.currenttime_subtask_id"], "currenttime_subtask._id"]
+              }
+            ]]],
+
+        ["add", "ct_subtaskname", "_T.temp_currenttime_subtask.subtaskname"],
+        ["add", "ct_taskname", "_T.temp_currenttime_subtask.taskname"],
+        ["add", "ct_projectname", "_T.temp_currenttime_subtask.projectname"],
+        ["add", "ct_projecttypename", "_T.temp_currenttime_subtask.projecttypename"],
+
+        ["add", "ct_subtask_attesting_user_name", "_T.temp_currenttime_subtask.subtask_attesting_user_name"],
+        ["add", "ct_subtask_leader_user_name", "_T.temp_currenttime_subtask.subtask_leader_user_name"],
+
+        ["remove", "temp_*"]
+
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

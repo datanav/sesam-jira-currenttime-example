@@ -149,9 +149,9 @@ combination. This is a bit tricker than for "workentry-currenttime", since there
 We must therefore do this operation in several steps. These are implemented in the "workentry-jira-step*"
 pipes, where each pipe reads the input from the previous step:
 
-#. `workentry-jira-step1-cook-jira-worklog <./conf/pipes/workentry-jira-step1-cook-jira-worklog.conf.json>`_
-#. `workentry-jira-step2-unique_workentry_ids <./conf/pipes/workentry-jira-step2-unique_workentry_ids.conf.json>`_
-#. `workentry-jira-step3-merge-worklog-entities  <./conf/pipes/workentry-jira-step3-merge-worklog-entities.conf.json>`_
+#. `workentry-jira-step1-cook-jira-worklog <./sesam-conf/pipes/workentry-jira-step1-cook-jira-worklog.conf.json>`_
+#. `workentry-jira-step2-unique_workentry_ids <./sesam-conf/pipes/workentry-jira-step2-unique_workentry_ids.conf.json>`_
+#. `workentry-jira-step3-merge-worklog-entities  <./sesam-conf/pipes/workentry-jira-step3-merge-worklog-entities.conf.json>`_
 
 
 
@@ -162,9 +162,9 @@ In this flow we want to create a dataset where each entity represents all the wo
 per day in currenttime, across all currenttime projects and tasks. We do this in a similar way to the
 "workentry-jira" flow, with three pipes:
 
-#. `workentry-total-currenttime-step1-cook <./conf/pipes/workentry-total-currenttime-step1-cook.conf.json>`_
-#. `workentry-total-currenttime-step2-unique-workentry_total_id <./conf/pipes/workentry-total-currenttime-step2-unique-workentry_total_id.conf.json>`_
-#. `workentry-total-currenttime-step3-merge <./conf/pipes/workentry-total-currenttime-step3-merge.conf.json>`_
+#. `workentry-total-currenttime-step1-cook <./sesam-conf/pipes/workentry-total-currenttime-step1-cook.conf.json>`_
+#. `workentry-total-currenttime-step2-unique-workentry_total_id <./sesam-conf/pipes/workentry-total-currenttime-step2-unique-workentry_total_id.conf.json>`_
+#. `workentry-total-currenttime-step3-merge <./sesam-conf/pipes/workentry-total-currenttime-step3-merge.conf.json>`_
 
 
 Creating "workentry-total-jira"
@@ -175,9 +175,9 @@ per day in JIRA, across all JIRA issues. The procedure is identical to how "work
 is created; We aggregate the values in the "workentry-jira" dataset for each user_name+date combination, using
 three pipes:
 
-#. `workentry-total-jira-step1-cook <./conf/pipes/workentry-total-jira-step1-cook.conf.json>`_
-#. `workentry-total-jira-step2-unique-workentry_total_id <./conf/pipes/workentry-total-jira-step2-unique-workentry_total_id.conf.json>`_
-#. `workentry-total-jira-step3-merge <./conf/pipes/workentry-total-jira-step3-merge.conf.json>`_
+#. `workentry-total-jira-step1-cook <./sesam-conf/pipes/workentry-total-jira-step1-cook.conf.json>`_
+#. `workentry-total-jira-step2-unique-workentry_total_id <./sesam-conf/pipes/workentry-total-jira-step2-unique-workentry_total_id.conf.json>`_
+#. `workentry-total-jira-step3-merge <./sesam-conf/pipes/workentry-total-jira-step3-merge.conf.json>`_
 
 The results end up in the "workentry-total-jira-step3-merge" dataset.
 
@@ -187,16 +187,19 @@ Finding errors in currenttime worklog entries with JIRA-keys
 
 This is done by the "workentry-currenttime-with-jira-keys-step*" pipes. 
 
-#. `workentry-currenttime-with-jira-keys-step1-note-filter <./conf/pipes/workentry-currenttime-with-jira-keys-step1-note-filter.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step2-jiraissue-keys <./conf/pipes/workentry-currenttime-with-jira-keys-step2-jiraissue-keys.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter <./conf/pipes/workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children <./conf/pipes/workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children <./conf/pipes/workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step6-lookup-jira-hours <./conf/pipes/workentry-currenttime-with-jira-keys-step6-lookup-jira-hours.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step7-compare-hours <./conf/pipes/workentry-currenttime-with-jira-keys-step7-compare-hours.conf.json>`_
-#. `workentry-currenttime-with-jira-keys-step8-has-errors-filter <./conf/pipes/workentry-currenttime-with-jira-keys-step8-has-errors-filter.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step1-note-filter <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step1-note-filter.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step2-jiraissue-keys <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step2-jiraissue-keys.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step3-jiraissue-keys-filter.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step4-create-jiraissue-keys-children.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step5-emit-jiraissue-keys-children.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step6-lookup-jira-hours <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step6-lookup-jira-hours.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step7-compare-hours <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step7-compare-hours.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step8-has-errors-filter <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step8-has-errors-filter.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step9-add-task-and-project-info <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step9-add-task-and-project-info.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step10-csv-format <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step10-csv-format.conf.json>`_
+#. `workentry-currenttime-with-jira-keys-step11-csv <./sesam-conf/pipes/workentry-currenttime-with-jira-keys-step11-csv.conf.json>`_
 
-
+workentry-currenttime-with-jira-keys-step11-csv
 
 Finding errors in the total number of hours in JIRA and CurrentTime
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,14 +210,14 @@ datasets and check that the number of hours are the same in both.
 
 This check is done by the following pipes:
 
-#. `compare-totals-step1-merge <./conf/pipes/compare-totals-step1-merge.conf.json>`_. 
+#. `compare-totals-step1-merge <./sesam-conf/pipes/compare-totals-step1-merge.conf.json>`_. 
    This pipe uses the "merge_dataset" source to gather corresponding entities from the 
    "workentry-total-jira-step3-merge" and "workentry-total-currenttime-step3-merge"
    datasets. 
-#. `compare-totals-step2-compare-hours <./conf/pipes/compare-totals-step2-compare-hours.conf.json>`_
-#. `compare-totals-step3-has-errors-filter <./conf/pipes/compare-totals-step3-has-errors-filter.conf.json>`_
-#. `compare-totals-step4-csv-format <./conf/pipes/compare-totals-step4-csv-format.conf.json>`_
-#. `compare-totals-step5-csv <./conf/pipes/compare-totals-step5-csv.conf.json>`_.
+#. `compare-totals-step2-compare-hours <./sesam-conf/pipes/compare-totals-step2-compare-hours.conf.json>`_
+#. `compare-totals-step3-has-errors-filter <./sesam-conf/pipes/compare-totals-step3-has-errors-filter.conf.json>`_
+#. `compare-totals-step4-csv-format <./sesam-conf/pipes/compare-totals-step4-csv-format.conf.json>`_
+#. `compare-totals-step5-csv <./sesam-conf/pipes/compare-totals-step5-csv.conf.json>`_.
    This pipe publishes the dataset of the previous pipe as a CSV-file at this url:
    `<http://localhost:9042/api/publishers/compare-totals-step5-csv/csv>`_
 
@@ -235,11 +238,11 @@ the JIRA and CurrentTime installations you want to connect to.
 Once you have gotten usernames and passwords for the JIRA and CurrentTime databases you can fill in
 the placeholder values in these files:
 
-`<./conf/environment_variables.json>`_
+`<./sesam-conf/environment_variables.json>`_
 
-`<./conf/secrets.json>`_
+`<./sesam-conf/secrets.json>`_
 
-Open a terminal and go to the "sesam-jira-currenttime-example/conf" folder. Run the following commands::
+Open a terminal and go to the "sesam-jira-currenttime-example/sesam-conf" folder. Run the following commands::
 
     $ sesam put-secrets secrets.json
     $ sesam put-env-vars environment_variables.json
@@ -250,6 +253,11 @@ run once per day, since some of the data that rarely changes in JIRA and Current
 wait for several hours, you should use the management studio (which is running on `<http://localhost:9042/>`_)
 to start all the pipes with ids that starts with "jira-" or "currenttime-". Depending on the amount of data
 some of the pipes can take a long to run (minutes or hours).
+
+Optionally, you can also start the webserver that provides cvs-files that are filtered to only return information
+relevant to the currently logged in user. This is described in the `webserver README-file <./webserver/README.rst>`_.
+
+
 
 
 Output

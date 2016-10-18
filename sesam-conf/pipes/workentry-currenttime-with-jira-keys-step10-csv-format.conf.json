@@ -1,0 +1,49 @@
+{
+  "_id": "workentry-currenttime-with-jira-keys-step10-csv-format",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-with-jira-keys-step9-add-task-and-project-info"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+
+        ["copy", "_id"],
+
+        ["comment", "This dataset represents the final output of all the other pipes",
+          "so we do a bit of cleanup and annotation here."
+        ],
+
+        ["add", "Username", "_S.user_name"],
+        ["add", "Date", "_S.date"],
+
+
+        ["comment", "Rename and tweak some attributes to make them more end-user readable."],
+        ["add", "Errors", "_S.errors"],
+        ["add", "JIRA keys",  "_S.jira_issue_keys"],
+
+        ["comment",
+          "Change attribute names to something more humanreadable and ",
+          "switch from '.' to ',' as decimal separator, since Excel prefers it"],
+        ["add", "JIRA hours", ["replace", ".", ",", ["string", "_S.total_jira_timeworked"]]],
+        ["add", "CT hours", ["replace", ".", ",", ["string", "_S.timeworked"]]],
+
+
+        ["add", "CT note",  ["replace", "\n", " ", ["replace", "\r", " ", "_S.note"]]],
+
+        ["add", "CT subtask", "_S.ct_subtaskname"],
+        ["add", "CT task", "_S.ct_taskname"],
+        ["add", "CT project", "_S.ct_projectname"],
+        ["add", "CT projecttype", "_S.ct_projecttypename"],
+
+        ["remove", "temp_*"]
+
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

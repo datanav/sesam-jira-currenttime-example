@@ -9,7 +9,7 @@
     "rules": {
       "default": [
         ["filter",
-          ["not", ["is-empty", "_S.errors"]]],
+          ["neq", "_S.errors", ""]],
         ["copy", "*"]
       ]
     }

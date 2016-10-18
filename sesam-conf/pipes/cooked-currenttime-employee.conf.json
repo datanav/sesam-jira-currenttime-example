@@ -1,0 +1,24 @@
+{
+  "_id": "cooked-currenttime-employee",
+  "source": {
+    "type": "dataset",
+    "dataset": "currenttime-employee"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "Sometimes the username includes a domain, like this: 'bouvet\\knut.johannessen', ",
+          "so we must use the 'split' function to just keep the real username-part."],
+        ["add", "user_name",
+          ["last",
+            ["split", "\\",
+              ["first", "_S.username"]]]]
+      ]
+    }
+  },
+  "type": "pipe"
+}

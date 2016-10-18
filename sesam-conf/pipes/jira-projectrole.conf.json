@@ -1,0 +1,12 @@
+{
+  "_id": "jira-projectrole",
+  "source": {
+    "system": "jira",
+    "table": "projectrole",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}

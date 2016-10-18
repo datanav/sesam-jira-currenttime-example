@@ -1,0 +1,15 @@
+{
+  "_id": "activedirectory-user",
+  "source": {
+    "system": "activedirectory",
+    "type": "ldap",
+    "search_base": "ou=Bouvet,dc=bouvet,dc=no",
+    "attribute_blacklist": ["msExchMailboxSecurityDescriptor", "userCertificate", "thumbnailPhoto", "msExchBlockedSendersHash", "msExchSafeSendersHash"]
+  },
+  "pump": {
+    "cron_expression": "0 0 * * *"
+  },
+  "type": "pipe"
+}
+
+

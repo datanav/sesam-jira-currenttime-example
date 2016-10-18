@@ -31,6 +31,28 @@
             }
           ]
         ],
+
+        ["add", "temp_leader",
+          ["hops", {
+            "datasets": ["cooked-currenttime-employee employee"],
+            "where":
+              ["eq", ["string", "_S.employeeidorig"], "employee._id"]
+            }
+          ]
+        ],
+
+        ["add", "temp_attester",
+          ["hops", {
+            "datasets": ["cooked-currenttime-employee employee"],
+            "where":
+              ["eq", ["string", "_S.employeeid"], "employee._id"]
+            }
+          ]
+        ],
+
+        ["add", "subtask_leader_user_name", ["first", "_T.temp_leader.user_name"]],
+        ["add", "subtask_attester_user_name", ["first", "_T.temp_attester.user_name"]],
+
         ["add", "projectname", ["first", "_T.temp_currenttime_project.projectname"]],
         ["add", "projecttypename", ["first", "_T.temp_currenttime_project.projecttypename"]],
         ["add", "is_internal_projecttype", ["first", "_T.temp_currenttime_project.is_internal_projecttype"]],

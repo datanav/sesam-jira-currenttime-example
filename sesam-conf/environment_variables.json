@@ -5,5 +5,7 @@
   
   "currenttime-host": "REPLACE_WITH_YOUR_CURRENTTIME_DB_HOST",
   "currenttime-port": REPLACE_WITH_YOUR_CURRENTTIME_DB_PORT,
-  "currenttime-database": "REPLACE_WITH_YOUR_CURRENTTIME_DB_DATABASENAME"
+  "currenttime-database": "REPLACE_WITH_YOUR_CURRENTTIME_DB_DATABASENAME",
+
+  "elasticsearch-hosts": ["localhost:9200"]
 }

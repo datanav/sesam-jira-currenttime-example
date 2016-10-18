@@ -1,0 +1,17 @@
+{
+  "_id": "workentry-currenttime-with-jira-keys-step10b-elasticsearch",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-currenttime-with-jira-keys-step9-add-task-and-project-info"
+  },
+  "sink": {
+    "type": "elasticsearch",
+    "system": "elasticsearch",
+    "default_type": "workentry-currenttime-with-jira-keys",
+    "default_index": "jira-currentime"
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}
