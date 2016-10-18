@@ -1,0 +1,22 @@
+body {
+    background-color: #f7f8f8;
+}
+
+h1 {
+    font-size: 38px;
+    padding: 10px 10px 10px 45px;
+    margin: 20px 0 35px -45px;
+    background-color: aliceblue;
+    width: calc(100% + 90px);
+    border-bottom: 1px solid #D8E4EF;
+}
+
+body {
+    background-color: #edf0f2;
+    margin: 0;
+    padding: 1em 5em 1em 5em;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+}

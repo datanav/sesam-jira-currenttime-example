@@ -1,1 +1,1 @@
-elasticsearch_host: localhost:9200
+elasticsearch_host: sesam-jira-currenttime-elasticsearch:9200

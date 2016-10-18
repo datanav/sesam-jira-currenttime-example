@@ -51,7 +51,7 @@ def _serve_csv_file(doctype, filename, fieldmapping):
 
     with tempfile.TemporaryDirectory() as tempdirname:
         csvfilename = os.path.join(tempdirname, filename)
-        with open(csvfilename, "w", newline="") as csvfile:
+        with open(csvfilename, "w", newline="", encoding="utf-8") as csvfile:
             cvswriter = csv.writer(csvfile, dialect='excel-tab')
             column_names = list(fieldmapping.keys())
             cvswriter.writerow(column_names)

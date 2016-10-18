@@ -27,4 +27,4 @@ COPY ./webserver /webserver
 WORKDIR /webserver
 RUN pip install -r requirements.txt
 ENTRYPOINT ["python3"]
-CMD ["webserver.py", "/webserver/config.json"]
+CMD ["webserver.py", "/webserver/config.yaml"]
