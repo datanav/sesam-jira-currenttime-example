@@ -10,7 +10,7 @@ import os.path
 import csv
 
 
-def _serve_csv_file(doctype, filename, fieldmapping):
+def serve_csv_file(doctype, filename, fieldmapping):
     elasticsearch_client = elasticsearch.Elasticsearch(current_app.config["elasticsearch_host"])
     user_name = request.headers.get("x-remote-user")
     user_name = user_name.split("\\")[-1]  # remove any domainname from the user_name
@@ -68,30 +68,3 @@ def _serve_csv_file(doctype, filename, fieldmapping):
                 cvswriter.writerow(values)
 
         return send_file(csvfilename)
-
-def compare_totals():
-    return _serve_csv_file(doctype="compare-totals",
-                           filename="compare-totals.csv",
-                           fieldmapping=collections.OrderedDict([
-                               ("Date", "date"),
-                               ("Username", "user_name"),
-                               ("Errors", "errors"),
-                               ("JIRA hours", "total_timeworked_from_jira"),
-                               ("CT hours", "total_timeworked_from_currenttime")])
-                           )
-
-
-def currenttime_with_jira_keys():
-    return _serve_csv_file(doctype="workentry-currenttime-with-jira-keys",
-                           filename="currenttime-with-jira-keys.csv",
-                           fieldmapping=collections.OrderedDict([
-                               ("Date", "date"),
-                               ("Username", "user_name"),
-                               ("Errors", "errors"),
-                               ("CT hours", "timeworked"),
-                               ("JIRA hours", "total_jira_timeworked"),
-                               ("CT subtask", "ct_subtaskname"),
-                               ("CT task", "ct_taskname"),
-                               ("CT project", "ct_projectname"),
-                               ("CT projecttype", "ct_projecttypename"),
-                               ("JIRA keys", "jira_issue_keys")]))

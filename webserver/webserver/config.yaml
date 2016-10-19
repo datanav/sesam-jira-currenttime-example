@@ -1,1 +1,4 @@
 elasticsearch_host: sesam-jira-currenttime-elasticsearch:9200
+# The webserver should be tucked behind a proxy server (for instance with a Virtualhost in Apache). The
+# webserver must be told about this path, in order to generate correct urls.
+virtualhost_path: "jira-currenttime-checker"
