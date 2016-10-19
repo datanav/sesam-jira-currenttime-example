@@ -10,38 +10,38 @@ import os.path
 import csv
 
 
-def get_username_search_body():
-    user_name = request.headers.get("x-remote-user")
-    user_name = user_name.split("\\")[-1]  # remove any domainname from the user_name
-
-    return {"query":
-        {
-            "bool": {
-                "should": [
-                    {
-                        "term": {"user_name": user_name}
-                    },
-                    {
-                        "term": {"ct_subtask_attesting_user_name": user_name}
-                    },
-                    {
-                        "term": {"ct_subtask_leader_user_name": user_name}
-                    }
-                ],
-            }
-        }
-    }
-
-
 def _serve_csv_file(doctype, filename, fieldmapping):
     elasticsearch_client = elasticsearch.Elasticsearch(current_app.config["elasticsearch_host"])
+    user_name = request.headers.get("x-remote-user")
+    user_name = user_name.split("\\")[-1]  # remove any domainname from the user_name
 
     size = 10000
     search_result = elasticsearch_client.search(
         index="jira-currentime",
         doc_type=doctype,
         size=size,
-        body=get_username_search_body())
+        body={
+            "query":
+            {
+                "bool": {
+                    "should": [
+                        {
+                            "term": {"user_name": user_name}
+                        },
+                        {
+                            "term": {"ct_subtask_attesting_user_name": user_name}
+                        },
+                        {
+                            "term": {"ct_subtask_leader_user_name": user_name}
+                        }
+                    ],
+                }
+            },
+            "sort": [
+                {"date": {"order": "desc"}},
+                {"user_name": {"order": "asc"}},
+            ],
+        })
 
     hits = search_result["hits"]
     if hits["total"] > size:
