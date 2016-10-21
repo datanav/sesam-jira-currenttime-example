@@ -1,0 +1,52 @@
+{
+  "_id": "customvalue-mapping-step1-filter-jira-customfieldvalue",
+  "source": {
+    "type": "dataset",
+    "dataset": "jira-customfieldvalue"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment", "filter out customvalues that have no currentime mapping defined."],
+
+        ["filter",
+          ["and",
+            ["not", ["is-null", "_S.STRINGVALUE"]],
+            ["neq", "_S.STRINGVALUE", ""]]],
+
+        ["add", "temp_mapping",
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-config-jira-customfieldvalue-to-currenttime-subtask mapping"],
+              "where":
+              [
+                ["eq", ["string", "_S.CUSTOMFIELD"], ["string", "mapping.jira_customfield_id"]],
+                ["eq", "_S.STRINGVALUE", "mapping.jira_customfield_value"]
+              ]
+              }
+            ]
+          ]
+        ],
+
+        ["filter", ["not", ["is-null", "_T.temp_mapping"]]],
+
+        ["add", "currenttime_subtask_id", ["string", "_T.temp_mapping.currenttime_subtask_id"]],
+        ["add", "jira_issue_id", ["string", "_S.ISSUE"]],
+
+        ["comment",
+          "When a customvalue suboption is selected, we get two entries: one with the ",
+          "parent option, and one with the suboption. We want the entry with the suboption to take ",
+          "precedence. We create a 'customfield_mapping_priority' attribute that we will later user ",
+          "to pick out the entry that represents the suboption."],
+        ["add", "customfield_mapping_priority", ["integer", "_T.temp_mapping.jira_customfield_suboption_id"]],
+
+        ["copy", "*"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

@@ -14,7 +14,7 @@
       "default": [
         ["comment",
           "Create one entity for each jirakey that was references in the 'note'-field of the ",
-          "currentime-timetransaction."],
+          "currenttime-timetransaction."],
         ["copy", "*"],
         ["create-child", ["apply", "jiraissuekey", "_S.jira_issue_keys"]]
       ],

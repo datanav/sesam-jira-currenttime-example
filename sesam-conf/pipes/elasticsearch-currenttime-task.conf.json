@@ -1,0 +1,14 @@
+{
+  "_id": "elasticsearch-currenttime-task",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "currenttime-task"
+  },
+  "sink": {
+    "type": "elasticsearch",
+    "system": "elasticsearch",
+    "default_type": "currenttime-task",
+    "default_index": "jira-currenttime"
+  }
+}

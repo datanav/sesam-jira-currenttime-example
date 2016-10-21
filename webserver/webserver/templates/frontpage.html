@@ -13,39 +13,43 @@
     </p>
 
     <p>
-        To look at the result of the checks, click on the links below (the links are not
-        to actual physical files, but to a webserver that filters the results so that you only see stuff
-        that is relevant to you):
-    </p>
-
-    <ul>
-        <li>
-            <a href="compare-totals.csv">compare-totals.csv</a>
-            <div>
-                This CSV-file displays the differences between the total number of hours logged in JIRA and the
-                total number of hours logged in CurrentTime.
-            </div>
-        </li>
-        <li>
-            <a href="currenttime-with-jira-keys.csv">currenttime-with-jira-keys.csv</a>
-            <div>
-                This CSV-file displays problems with CurrentTime entries that refer to JIRA-issues in
-                the "Note" field.
-            </div>
-        </li>
-    </ul>
-    <p>
-        The CSV-files are updated roughly every 5 minutes. Some changes will take longer to appear:<br />
+        The values are updated roughly every 5 minutes. Some changes will take longer to appear:<br />
         New JIRA-tasks takes roughly an hour to appear.<br />
         CurrentTime projects, tasks and subtasks are refreshed nightly, so a new subtask will normally not  be
         available until the next day.
     </p>
 
     <p>
-        A good way to view the CSV-files are to import them in MS Excel. You can create such a file yourself, or
-        download the one below. This Excel file has two worksheets that each link to one of the CSV-files described
-        above. (Use the "Data"=>"Refresh all" button in Excel to see the latest data.)
+        Current, the following checks have been implemented.
+
+
     </p>
+
+    <ul>
+        <li>
+            <strong>Differences in total number of hours in JIRA and CurrentTime</strong>
+            <div>
+                This test checks for differences between the total number of hours logged in JIRA and the
+                total number of hours logged in CurrentTime.
+            </div>
+            <div>
+              The results can be viewed directly <a href="#total_hours">below</a> or be downloaded as
+              a <a href="compare-totals.csv">csv file</a>.
+            </div>
+        </li>
+        <li>
+            <strong>Problems with CurrentTime entries that refer to JIRA-issues</strong>
+            <div>
+                This test checks for problems with CurrentTime entries that refer to JIRA-issues in
+                the "Note" field.
+            </div>
+            <div>
+              The results can be viewed directly <a href="#current_time_with_jira_keys_results">below</a>
+              or be downloaded as a <a href="currenttime-with-jira-keys.csv">csv file</a>.
+            </div>
+        </li>
+    </ul>
+
     <ul>
         <li>
             <a href="static/jira-currenttime.xlsx">jira-currenttime.xlsx</a>
@@ -53,6 +57,67 @@
     </ul>
 
     <hr />
+
+    <h2 id="total_hours">Differences in total number of hours in JIRA and CurrentTime</h2>
+
+    {% if totals_results %}
+      <p>
+        The following differences between the total number of hours logged in JIRA and the
+        total number of hours logged in CurrentTime was found:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            {% for fieldname in totals_results[0].keys() %}
+              <th class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldname }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in totals_results %}
+            <tr>
+                {% for fieldname, fieldvalue in result.items() %}
+                  <td class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldvalue }}</td>
+                {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+        <p>No differences between the total number of hours logged in JIRA and in CurrentTime was found.</p>
+    {% endif %}
+
+    <hr />
+    <h2 id="current_time_with_jira_keys_results">Differences in total number of hours in JIRA and CurrentTime</h2>
+
+    {% if current_time_with_jira_keys_results %}
+      <p>
+        The following problems with CurrentTime entries that refer to JIRA-issues in the "Description" field was found.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            {% for fieldname in current_time_with_jira_keys_results[0].keys() %}
+              <th class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldname }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in current_time_with_jira_keys_results %}
+            <tr>
+                {% for fieldname, fieldvalue in result.items() %}
+                  <td class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldvalue }}</td>
+                {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No problems with CurrentTime entries that refer to JIRA-issues in the "Description" field was found.</p>
+    {% endif %}
+
+    <hr />
+
     <p>
         These checks have been implemented using SESAM, and are described in detail at
         <a href="https://github.com/sesam-io/sesam-jira-currenttime-example">https://github.com/sesam-io/sesam-jira-currenttime-example</a>.
@@ -60,6 +125,7 @@
     <p>
         Comments, suggestions and questions should be sent to <a href="mailto:knut.johannessen@sesam.io">knut.johannessen@sesam.io</a>
     </p>
+
     <p>
         <a href="ui?url={{swagger_file_url}}#/default">API reference</a>
     </p>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>JIRA/Currenttime checker customfieldvalue config</title>
+    <link type="text/css" href="static/index.css" rel="stylesheet"/>
+</head>
+<body>
+    <h1>JIRA/Currenttime checker configuration</h1>
+    <p>
+      One way to tell the JIRA/Currenttime checker which JIRA-issues and CurrentTime subtasks are connected
+      is by manually specifying that certain customfield values on a JIRA-issue means that the JIRA-issue
+      "belongs to" a CurrentTime subtask.
+    </p>
+
+    <div>
+        <form action="" id="add-mapping-form">
+            <div>
+                <fieldset style="display:inline">
+                    <legend>JIRA:</legend>
+                    <label>Customfield:
+                        <select name="jira-customfield">
+                            <option value="0">*Select a customfield*</option>
+                        </select>
+                    </label>
+                    <label>Option:
+                        <select name="jira-customfield-option">
+                        </select>
+                    </label>
+                    <label id="jira-customfield-suboption-parent" style="display: none">Sub-option:
+                        <select name="jira-customfield-suboption">
+                        </select>
+                    </label>
+                </fieldset>
+            </div>
+
+            <div style="margin-left:10em">⇩</div>
+
+            <div>
+                <fieldset style="display:inline">
+                    <legend>CurrentTime:</legend>
+                    <label>Project:
+                        <select name="currenttime-project">
+                            <option value="0">*Select a project*</option>
+                        </select>
+                    </label>
+                    <label>Task:
+                        <select name="currenttime-task">
+                        </select>
+                    </label>
+                    <label>Subtask:
+                        <select name="currenttime-subtask">
+                        </select>
+                    </label>
+                </fieldset>
+            </div>
+            <br />
+
+            <button type="submit" id="add-mapping-button">Add mapping</button>
+
+        </form>
+
+    </div>
+
+    <hr />
+
+    <h2>Customfield value => CurrentTime subtask mappings:</h2>
+    <div id="customfieldvalue-mappings">
+        {{mappings|safe}}
+    </div>
+
+    <div id="busyIndicator"></div>
+    <script src="static/jquery-3.1.1.js"></script>
+    <script >
+        var jiraCustomfields = {{ jira_customfields | safe }};
+        var currenttimeProjects = {{ currenttime_projects | safe }};
+
+    </script>
+    <script src="static/customfieldvalue_config.js"></script>
+
+
+</body>
+
+</html>

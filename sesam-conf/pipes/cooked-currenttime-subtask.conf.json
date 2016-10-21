@@ -11,51 +11,61 @@
         ["copy", "*"],
 
         ["comment",
-          "Denormalize a bit by looking up the currentime-task and currenttime-project names."],
+          "Denormalize a bit by looking up the currenttime-task and currenttime-project names."],
 
         ["add", "temp_currenttime_task",
-          ["hops", {
-            "datasets": ["currenttime-task currenttime_task"],
-            "where":
-              ["eq", ["string", "_S.taskid"], "currenttime_task._id"]
-            }
+          ["first",
+            ["hops", {
+              "datasets": ["currenttime-task currenttime_task"],
+              "where":
+                ["eq", ["string", "_S.taskid"], "currenttime_task._id"]
+              }
+            ]
           ]
         ],
-        ["add", "taskname", ["first", "_T.temp_currenttime_task.taskname"]],
+        ["add", "taskname", "_T.temp_currenttime_task.taskname"],
 
         ["add", "temp_currenttime_project",
-          ["hops", {
-            "datasets": ["cooked-currenttime-project currenttime_project"],
-            "where":
-              ["eq", ["string", "_S.projectid"], "currenttime_project._id"]
-            }
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-project currenttime_project"],
+              "where":
+                ["eq", ["string", "_S.projectid"], "currenttime_project._id"]
+              }
+            ]
           ]
         ],
 
+
         ["add", "temp_leader",
-          ["hops", {
-            "datasets": ["cooked-currenttime-employee employee"],
-            "where":
-              ["eq", ["string", "_S.employeeidorig"], "employee._id"]
-            }
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-employee employee"],
+              "where":
+                ["eq", ["string", "_S.employeeidorig"], "employee._id"]
+              }
+            ]
           ]
         ],
 
         ["add", "temp_attester",
-          ["hops", {
-            "datasets": ["cooked-currenttime-employee employee"],
-            "where":
-              ["eq", ["string", "_S.employeeid"], "employee._id"]
-            }
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-employee employee"],
+              "where":
+                ["eq", ["string", "_S.employeeid"], "employee._id"]
+              }
+            ]
           ]
         ],
 
-        ["add", "subtask_leader_user_name", ["first", "_T.temp_leader.user_name"]],
-        ["add", "subtask_attester_user_name", ["first", "_T.temp_attester.user_name"]],
+        ["add", "subtask_leader_user_name", "_T.temp_leader.user_name"],
+        ["add", "subtask_attester_user_name", "_T.temp_attester.user_name"],
 
-        ["add", "projectname", ["first", "_T.temp_currenttime_project.projectname"]],
-        ["add", "projecttypename", ["first", "_T.temp_currenttime_project.projecttypename"]],
-        ["add", "is_internal_projecttype", ["first", "_T.temp_currenttime_project.is_internal_projecttype"]],
+        ["add", "projectname", "_T.temp_currenttime_project.projectname"],
+        ["add", "projecttypename", "_T.temp_currenttime_project.projecttypename"],
+        ["add", "is_internal_projecttype", "_T.temp_currenttime_project.is_internal_projecttype"],
+        ["add", "projectactive", "_T.temp_currenttime_project.projectactive"],
 
         ["comment", "Remove the temporary variables."],
         ["remove", "temp_*"]

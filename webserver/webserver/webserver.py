@@ -1,5 +1,6 @@
 import copy
 import logging
+import pkg_resources
 import os.path
 import sys
 import urllib.parse
@@ -10,7 +11,57 @@ import yaml
 from connexion.resolver import RestyResolver
 import werkzeug.contrib.fixers
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
+
+
+class MySwaggerResolver(connexion.Resolver):
+    """
+    Resolves endpoint functions based on the endpoint path and method
+    """
+
+    def __init__(self, default_module_name):
+        """
+        :param default_module_name: Default module name for operations
+        :type default_module_name: str
+        """
+        connexion.Resolver.__init__(self)
+        self.default_module_name = default_module_name
+
+    def resolve_operation_id(self, operation):
+        """
+        Resolves the operationId based on the endpoint path and method unless explicitly configured in the spec
+
+        :type operation: connexion.operation.Operation
+        """
+        if operation.operation.get('operationId'):
+            return super().resolve_operation_id(operation)
+
+        operation_path_elements = []
+        for element in operation.path.lstrip("/").rstrip("/").split("/"):
+            if element.startswith("{"):
+                # this is a dynamic parameter, so we stop the routing here
+                break
+            operation_path_elements.append(element)
+
+        def get_controller_name():
+            x_router_controller = operation.operation.get('x-swagger-router-controller')
+
+            name = self.default_module_name
+            resource_name = ".".join(operation_path_elements)
+
+            if x_router_controller:
+                name = x_router_controller
+
+            elif resource_name:
+                resource_controller_name = resource_name.replace('-', '_')
+                name += '.' + resource_controller_name
+
+            return name
+
+        def get_function_name():
+            return operation.method.lower()
+
+        return '{}.{}'.format(get_controller_name(), get_function_name())
 
 
 def main():
@@ -29,8 +80,8 @@ def main():
     flaskapp.wsgi_app = werkzeug.contrib.fixers.ProxyFix(flaskapp.wsgi_app)
 
     public_api = app.add_api(
-        os.path.join(os.path.dirname(__file__), 'swagger.yaml'),
-        resolver=RestyResolver('api'),
+        pkg_resources.resource_filename(__name__, 'swagger.yaml'),
+        resolver=MySwaggerResolver('api'),
         swagger_json=False  # We need to return a customized swagger.conf in order to handle VirtualHost'ing
         )
 

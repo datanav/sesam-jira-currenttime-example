@@ -1,0 +1,12 @@
+{
+  "_id": "jira-customfieldvalue",
+  "source": {
+    "system": "jira",
+    "table": "customfieldvalue",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 */2 * * *"
+  },
+  "type": "pipe"
+}

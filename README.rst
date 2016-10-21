@@ -45,7 +45,7 @@ We must therefore connect JIRA-issues with CurrentTime subtasks it in a more 'un
 
 One commonly used method is to type in the JIRA issue-key when logging hours in CurrentTime, like this:
 
-.. image:: ./currentime_note_with_jira_issue_key.png
+.. image:: ./currenttime_note_with_jira_issue_key.png
 
 In this case we want to find all CurrentTime worklog entries that refer to one or
 more JIRA-issues and check that the number of hours in the CurremtTime worklog entry matches the 
@@ -95,7 +95,7 @@ SESAM connects directly to the JIRA and CurrentTime databases.
 
 Each "jira-<tablename>" pipe reads from the one JIRA database table and stores the raw data in a dataset.
 
-Each "currentime-<tablename>" pipe reads from the one CurrentTime database table and stores the raw data in a dataset. 
+Each "currenttime-<tablename>" pipe reads from the one CurrentTime database table and stores the raw data in a dataset.
 
 The most important of these are the "jira-worklog" and "jira-timetransaction" pipes. These tables contain 
 the actual information about hours worked, and are the ones where the content is most frequently modified.
@@ -127,10 +127,10 @@ Adds "taskname", "projectname" and "projecttypename" attributes by doing lookups
 Creating "workentry-currenttime"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
-In this flow we want to take the raw data and create a dataset with one entity for each user+day+currentime_subtask
+In this flow we want to take the raw data and create a dataset with one entity for each user+day+currenttime_subtask
 combination. The "_id" attribute of the resulting entities are on the form "<user_name>--<date>--<currenttime_subtask_id>".
 
-This is straightforward, since each entity in the "currentime-timetransaction" maps directly to what
+This is straightforward, since each entity in the "currenttime-timetransaction" maps directly to what
 we want. The "workentry-currenttime" pipe just have to collect some extra information from other datasets 
 (for instance getting the "user_email" attribute from the "currenttime-employee" dataset). 
 

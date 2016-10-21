@@ -1,0 +1,79 @@
+{
+  "_id": "cooked-config-jira-customfieldvalue-to-currenttime-subtask",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "config-jira-customfieldvalue-to-currenttime-subtask"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "We look up the human-readable names of everything."],
+
+        ["add", "temp_currenttime_subtask",
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-subtask currenttime_subtask"],
+              "where":
+                ["eq", ["string", "_S.currenttime_subtask_id"], "currenttime_subtask._id"]
+              }
+            ]
+          ]
+        ],
+        ["add", "currenttime_projectname", "_T.temp_currenttime_subtask.projectname"],
+        ["add", "currenttime_taskname", "_T.temp_currenttime_subtask.taskname"],
+        ["add", "currenttime_subtaskname", "_T.temp_currenttime_subtask.subtaskname"],
+
+
+        ["add", "temp_jira_customfield",
+          ["first",
+            ["hops", {
+              "datasets": ["jira-customfield jira_customfield"],
+              "where":
+                ["eq", ["string", "_S.jira_customfield_id"], "jira_customfield._id"]
+              }
+            ]
+          ]
+        ],
+
+        ["add", "temp_jira_customfield_option",
+          ["first",
+            ["hops", {
+              "datasets": ["jira-customfieldoption jira_customfieldoption"],
+              "where":
+                ["eq", ["string", "_S.jira_customfield_option_id"], "jira_customfieldoption._id"]
+              }
+            ]
+          ]
+        ],
+
+        ["add", "temp_jira_customfield_suboption",
+          ["first",
+            ["hops", {
+              "datasets": ["jira-customfieldoption jira_customfieldoption"],
+              "where":
+                ["eq", ["string", "_S.jira_customfield_suboption_id"], "jira_customfieldoption._id"]
+              }
+            ]
+          ]
+        ],
+
+        ["add", "jira_customfield_name", "_T.temp_jira_customfield.cfname"],
+        ["add", "jira_customfield_option_value", "_T.temp_jira_customfield_option.customvalue"],
+        ["add", "jira_customfield_suboption_value", "_T.temp_jira_customfield_suboption.customvalue"],
+
+        ["comment", "If this is a suboption, it is the value of the suboption that is the relevant one."],
+        ["if", ["is-null", "_T.temp_jira_customfield_suboption.customvalue"],
+          ["add", "jira_customfield_value", "_T.temp_jira_customfield_option._id"],
+          ["add", "jira_customfield_value", "_T.temp_jira_customfield_suboption._id"]
+        ],
+
+        ["remove", "temp_*"]
+      ]
+    }
+  }
+}

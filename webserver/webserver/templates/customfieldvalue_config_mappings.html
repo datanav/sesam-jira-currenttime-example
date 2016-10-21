@@ -1,0 +1,33 @@
+<table>
+    <thead>
+        <tr>
+            <th>JIRA Customfield</th>
+            <th>JIRA Customfield option</th>
+            <th>JIRA Customfield suboption</th>
+            <th class="mapping-arrow"></th>
+            <th>CurrentTime project</th>
+            <th>CurrentTime task</th>
+            <th>CurrentTime subtask</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for mapping in mappings %}
+        <tr>
+            <td>{{mapping["jira_customfield_name"]  or ""}}</td>
+            <td>{{mapping["jira_customfield_option_value"]  or ""}}</td>
+            <td>{{mapping["jira_customfield_suboption_value"]  or ""}}</td>
+
+            <td class="mapping-arrow">=&gt;</td>
+
+            <td>{{mapping["currenttime_projectname"]  or ""}}</td>
+            <td>{{mapping["currenttime_taskname"]  or ""}}</td>
+            <td>{{mapping["currenttime_subtaskname"]  or ""}}</td>
+            <td><button data-mapping_id="{{mapping['_id']}}"
+                        class="delete-mapping"
+                        title="Click to remove this mapping">X</button></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>

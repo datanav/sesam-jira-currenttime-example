@@ -1,0 +1,14 @@
+{
+  "_id": "elasticsearch-currenttime-project",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "cooked-currenttime-project"
+  },
+  "sink": {
+    "type": "elasticsearch",
+    "system": "elasticsearch",
+    "default_type": "currenttime-project",
+    "default_index": "jira-currenttime"
+  }
+}

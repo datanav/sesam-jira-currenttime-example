@@ -10,7 +10,7 @@
       "default": [
         ["comment",
           "We use the '_S.workentry_total_id' as the '_id', in order to get a list of unique workentry ids. The next step ",
-          "will read this dataset and do hops to 'worklog-total-currentime-step1-cook' to get all the entities ",
+          "will read this dataset and do hops to 'worklog-total-currenttime-step1-cook' to get all the entities ",
           "that should contribute to the final workentry."],
         ["add", "_id", "_S.workentry_total_id"]
       ]
