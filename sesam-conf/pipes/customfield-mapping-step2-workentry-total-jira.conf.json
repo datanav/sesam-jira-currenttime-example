@@ -1,0 +1,57 @@
+{
+  "_id": "customfield-mapping-step2-workentry-total-jira",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-jira-step3-merge-worklog-entities"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+          "Filter out jira workentries that doesn't have a customfield mapping."],
+
+         ["add", "temp_mappings",
+          ["hops", {
+            "datasets": ["customfield-mapping-step1-filter-jira-customfieldvalue mappings"],
+            "where":
+              ["eq", "_S.issueid", "mappings.jira_issue_id"]
+            }
+          ]
+        ],
+        ["filter", ["not", ["is-empty", "_T.temp_mappings"]]],
+
+        ["copy", "*"],
+
+        ["comment",
+          "Find the mapping with the highest priority. When the customvalue has been set with a child-option, the ",
+          "issue will have a two customvalues: one with the parent option, and one with the sub-option. We want to ",
+          "use the child-option, so we must order the mappings on the customfield_mapping_priority' attribute. ",
+          "This is higher for child-options than for parent-options."],
+        ["add", "temp_sorted_mappings",
+          ["sorted-descending", "_.customfield_mapping_priority", "_T.temp_mappings"]],
+
+        ["add", "temp_selected_mapping",
+          ["first", "_T.temp_sorted_mappings"]],
+
+        ["add", "currenttime_subtask_id", "_T.temp_selected_mapping.currenttime_subtask_id"],
+
+
+        ["comment",
+          "Add the workentry id based on the username--date--currenttime_subtask_id combination. This is the ",
+          "id of the combined entity that this entity will eventually form part of.",
+          "(A pipe later on in this flow will all the jira workentries for each username--date--currenttime_subtask_id ",
+          "combination into one entity.)"
+        ],
+        ["add", "workentry_id",
+          ["concat", ["list", "_S.user_name", "--", "_S.date", "--", "_T.currenttime_subtask_id"]]],
+
+        ["remove", "temp_*"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

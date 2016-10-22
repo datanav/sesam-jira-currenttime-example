@@ -42,6 +42,12 @@
             }
           ]
         ],
+        ["comment",
+          "It is possible that we haven't loaded the jiraissue yet, if this is a newly created JIRA-issue. ",
+          "We filter out the entity for now; it will be reprocessed automatically once the jiraisseu appears."
+        ],
+        ["filter", ["not", ["is-empty", "_T.temp_cooked_jira_jiraissue"]]],
+
         ["add", "jira_issue_key", ["first", "_T.temp_cooked_jira_jiraissue.jira_issue_key"]],
 
         ["comment",

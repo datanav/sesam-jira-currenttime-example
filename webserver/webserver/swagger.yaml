@@ -100,3 +100,14 @@ paths:
       responses:
         200:
           description: OK
+
+  /customfield-mappings.csv:
+    get:
+      summary:
+        Returns a CSV-file that displays problems with JIRA issues that has a customfield value that is
+        mapped to a CurrentTime subtask.
+      produces:
+        - text/csv
+      responses:
+        200:
+          description: OK

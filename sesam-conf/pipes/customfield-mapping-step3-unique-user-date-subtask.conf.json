@@ -1,0 +1,24 @@
+{
+  "_id": "customfield-mapping-step3-unique-user-date-subtask",
+  "source": {
+    "type": "dataset",
+    "dataset": "customfield-mapping-step2-workentry-total-jira"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+          "Find all the username--date--currenttime_subtask_id combinations. The next pipe in this flow ",
+          "will read this dataset and merge all the jira workentries for each username--date--currenttime_subtask_id ",
+          "combination into one entity."
+        ],
+        ["add", "_id", "_S.workentry_id"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

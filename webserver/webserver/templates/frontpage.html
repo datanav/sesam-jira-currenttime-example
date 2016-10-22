@@ -1,3 +1,30 @@
+{% macro errorlisting(errorlist) -%}
+    {% if errorlist %}
+      <p>
+        The following problems were found:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            {% for fieldname in errorlist[0].keys() %}
+              <th class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldname }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in errorlist %}
+            <tr>
+                {% for fieldname, fieldvalue in result.items() %}
+                  <td class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldvalue }}</td>
+                {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+        <p>No problems were found.</p>
+    {% endif %}
+{%- endmacro %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +33,7 @@
     <link type="text/css" href="static/index.css" rel="stylesheet"/>
 </head>
 <body>
+
     <h1>Welcome to the experimental JIRA/Currenttime checker!</h1>
     <p>
         The JIRA/Currenttime checker compares the hours logged in JIRA and CurrentTime and reports any discrepancies
@@ -48,6 +76,17 @@
               or be downloaded as a <a href="currenttime-with-jira-keys.csv">csv file</a>.
             </div>
         </li>
+        <li>
+            <strong>Problems with JIRA customfield mappings</strong>
+            <div>
+                This test checks for problems with JIRA entries that has a customfield value that maps them
+                to a CurrentTime subtask. (As specified in the <a href="customfieldvalue-config">configuration</a>).
+            </div>
+            <div>
+              The results can be viewed directly <a href="#customfield_mapping_results">below</a>
+              or be downloaded as a <a href="customfield_mapping.csv">csv file</a>.
+            </div>
+        </li>
     </ul>
 
     <ul>
@@ -57,64 +96,20 @@
     </ul>
 
     <hr />
-
     <h2 id="total_hours">Differences in total number of hours in JIRA and CurrentTime</h2>
+    {{errorlisting(totals_results)}}
 
-    {% if totals_results %}
-      <p>
-        The following differences between the total number of hours logged in JIRA and the
-        total number of hours logged in CurrentTime was found:
-      </p>
-      <table>
-        <thead>
-          <tr>
-            {% for fieldname in totals_results[0].keys() %}
-              <th class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldname }}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for result in totals_results %}
-            <tr>
-                {% for fieldname, fieldvalue in result.items() %}
-                  <td class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldvalue }}</td>
-                {% endfor %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-        <p>No differences between the total number of hours logged in JIRA and in CurrentTime was found.</p>
-    {% endif %}
 
     <hr />
     <h2 id="current_time_with_jira_keys_results">Differences in total number of hours in JIRA and CurrentTime</h2>
+    {{errorlisting(current_time_with_jira_keys_results)}}
 
-    {% if current_time_with_jira_keys_results %}
-      <p>
-        The following problems with CurrentTime entries that refer to JIRA-issues in the "Description" field was found.
-      </p>
-      <table>
-        <thead>
-          <tr>
-            {% for fieldname in current_time_with_jira_keys_results[0].keys() %}
-              <th class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldname }}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for result in current_time_with_jira_keys_results %}
-            <tr>
-                {% for fieldname, fieldvalue in result.items() %}
-                  <td class="{{fieldname.lower().replace(' ', '-')}}">{{ fieldvalue }}</td>
-                {% endfor %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>No problems with CurrentTime entries that refer to JIRA-issues in the "Description" field was found.</p>
-    {% endif %}
+
+    <hr />
+    <h2 id="customfield_mapping_results">Differences in hours in JIRA-issues that is mapped to a specific CurrentTime subtask</h2>
+    {{errorlisting(customfield_mapping_results)}}
+
+
 
     <hr />
 

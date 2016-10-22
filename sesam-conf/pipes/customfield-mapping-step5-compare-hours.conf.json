@@ -1,0 +1,83 @@
+{
+  "_id": "customfield-mapping-step5-compare-hours",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "customfield-mapping-step4-combine-jiratasks"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["comment",
+         "This  pipe compares the number of hours in JIRA and CurrentTime and creates an appropirate errormessage ",
+         "if needed."
+        ],
+
+        ["copy", "*"],
+        ["add", "timeworked_from_jira", "_S.timeworked"],
+        ["remove", "timeworked"],
+
+
+        ["comment", "Look up the currenttime workentry for this user, date and subtask"],
+        ["add", "temp_workentry_currenttime",
+          ["first", ["hops", {
+              "datasets": ["workentry-currenttime workentry_currenttime"],
+              "where":
+                ["eq", "_S._id", "workentry_currenttime._id"]
+              }
+            ]
+          ]
+        ],
+
+        ["add", "timeworked_from_currenttime", "_S.temp_workentry_currenttime.timeworked"],
+        ["if", ["is-null", "_T.timeworked_from_currenttime"],
+          ["add", "timeworked_from_currenttime", ["decimal", "0"]]],
+
+        ["add", "errors", ""],
+        ["if", ["neq", "_T.timeworked_from_jira", "_T.timeworked_from_currenttime"],
+          ["add", "errors", ["concat",
+            ["list",
+              "The total number of hours logged in CurrentTime and JIRA are not identical. JIRA: ",
+              ["string", "_T.timeworked_from_jira"],
+              " hours. CurrentTime: ",
+              ["string", "_T.timeworked_from_currenttime"],
+              " hours"
+            ]]]],
+
+        ["comment", "filter out entries with no errors"],
+        ["filter", ["not", ["is-empty", "_T.errors"]]],
+
+        ["comment",
+          "join the temporary lists into strings."
+        ],
+        ["add", "errors", ["replace", "\n", " ", ["replace", "\r", " ", ["join", ". ", "_T.errors"]]]],
+
+        ["comment",
+          "Add info about currenttime subtask, task and project."],
+        ["add", "temp_currenttime_subtask",
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-subtask currenttime_subtask"],
+              "where":
+                ["eq", "_S.currenttime_subtask_id", "currenttime_subtask._id"]
+              }
+            ]]],
+
+        ["add", "ct_subtaskname", "_T.temp_currenttime_subtask.subtaskname"],
+        ["add", "ct_taskname", "_T.temp_currenttime_subtask.taskname"],
+        ["add", "ct_projectname", "_T.temp_currenttime_subtask.projectname"],
+        ["add", "ct_projecttypename", "_T.temp_currenttime_subtask.projecttypename"],
+
+        ["add", "ct_subtask_attesting_user_name", "_T.temp_currenttime_subtask.subtask_attesting_user_name"],
+        ["add", "ct_subtask_leader_user_name", "_T.temp_currenttime_subtask.subtask_leader_user_name"],
+
+        ["remove", "temp_*"]
+
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}

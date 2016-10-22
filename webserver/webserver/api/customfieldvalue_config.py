@@ -18,6 +18,10 @@ _cached_jira_customfields = None
 _cached_jira_customfields_lock = threading.RLock()
 
 
+def lowercase_name_sort_key(item):
+    "utility-function used with list.sort"
+    return item["name"].lower()
+
 def get_jira_customfields():
     global _cached_jira_customfields
     with _cached_jira_customfields_lock:
@@ -91,12 +95,12 @@ def get_jira_customfields():
                     children = []
                     for child in root_option["child_options"]:
                         children.append({
-                            "name": child["customvalue"],
+                            "name": child["customfield"],
                             "id": str(int(child["ID"])),
                         })
                     root_option_info = root_option["option"]
                     formatted_root_option = {
-                      "name": root_option_info["customvalue"],
+                      "name": root_option_info["customfield"],
                       "id": str(int(root_option_info["ID"])),
                     }
                     if children:
@@ -116,7 +120,14 @@ def get_jira_customfields():
                     }
                 )
 
-            jira_customfields.sort(key=operator.itemgetter("name"))
+            jira_customfields.sort(key=lowercase_name_sort_key)
+            for customfield in jira_customfields:
+                customfield["options"].sort(key=lowercase_name_sort_key)
+                for option in customfield["options"]:
+                    if "suboptions" in option:
+                        option["suboptions"].sort(key=lowercase_name_sort_key)
+
+
             jira_customfields_as_json = json.dumps(jira_customfields)
             _cached_jira_customfields = {"timestamp": time.monotonic(),
                                                 "value": jira_customfields_as_json,
@@ -192,12 +203,12 @@ def get_ct_project_task_subtask():
             }
 
         # The elasticsearch "sort" stuff doesn't seem to work, so we have to do it here
-        ct_projects = sorted(ct_projects.values(), key=operator.itemgetter("name"))
+        ct_projects = sorted(ct_projects.values(), key=lowercase_name_sort_key)
 
         for project in ct_projects:
-            project["tasks"] = sorted(project["tasks"].values(), key=operator.itemgetter("name"))
+            project["tasks"] = sorted(project["tasks"].values(), key=lowercase_name_sort_key)
             for task in project["tasks"]:
-                task["subtasks"] = sorted(task["subtasks"].values(), key=operator.itemgetter("name"))
+                task["subtasks"] = sorted(task["subtasks"].values(), key=lowercase_name_sort_key)
 
         ct_projects_as_json = json.dumps(ct_projects)
         _cached_ct_project_task_subtask = {"timestamp": time.monotonic(),

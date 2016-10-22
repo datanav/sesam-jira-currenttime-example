@@ -1,5 +1,5 @@
 {
-  "_id": "customvalue-mapping-step1-filter-jira-customfieldvalue",
+  "_id": "customfield-mapping-step1-filter-jira-customfieldvalue",
   "source": {
     "type": "dataset",
     "dataset": "jira-customfieldvalue"
@@ -41,7 +41,9 @@
           "to pick out the entry that represents the suboption."],
         ["add", "customfield_mapping_priority", ["integer", "_T.temp_mapping.jira_customfield_suboption_id"]],
 
-        ["copy", "*"]
+        ["copy", "*"],
+
+        ["remove", "temp_*"]
       ]
     }
   },

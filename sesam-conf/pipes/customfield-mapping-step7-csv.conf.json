@@ -1,0 +1,22 @@
+{
+  "_id": "customfield-mapping-step7-csv",
+  "source": {
+    "type": "dataset",
+    "dataset": "customfield-mapping-step6-csv-format"
+  },
+  "sink": {
+    "type": "csv_endpoint",
+    "columns": [
+      "Date",
+      "Username",
+      "Errors",
+      "JIRA hours",
+      "CT hours",
+      "JIRA issues"
+    ],
+    "delimiter": ";",
+    "lineterminator": "\r\n",
+    "skip-deleted-entities": true
+  },
+  "type": "pipe"
+}

@@ -1,0 +1,17 @@
+{
+  "_id": "customfield-mapping-step6b-elasticsearch",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "customfield-mapping-step5-compare-hours.conf.json"
+  },
+  "sink": {
+    "type": "elasticsearch",
+    "system": "elasticsearch",
+    "default_type": "customfield-mapping",
+    "default_index": "jira-currenttime"
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}

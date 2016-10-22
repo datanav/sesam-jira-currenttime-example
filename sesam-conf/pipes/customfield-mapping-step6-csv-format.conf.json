@@ -1,0 +1,32 @@
+{
+  "_id": "customfield-mapping-step6-csv-format",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "customfield-mapping-step5-compare-hours"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+
+        ["comment",
+          "Change attribute names to something more humanreadable."],
+        ["add", "Date", "_S.date"],
+        ["add", "Username", "_S.user_name"],
+        ["add", "Errors", "_S.errors"],
+
+        ["comment",
+          "Change attribute names to something more humanreadable and ",
+          "switch from '.' to ',' as decimal separator, since Excel prefers it."],
+        ["add", "JIRA hours", ["replace", ".", ",", ["string", "_S.timeworked_from_jira"]]],
+        ["add", "CT hours", ["replace", ".", ",", ["string", "_S.timeworked_from_currenttime"]]],
+        ["add", "JIRA issues", "_S.jira_issue_key_hours"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}
