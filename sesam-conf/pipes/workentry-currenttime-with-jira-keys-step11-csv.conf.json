@@ -12,10 +12,9 @@
       "Errors",
       "CT hours",
       "JIRA hours",
-      "CT subtask",
-      "CT task",
-      "CT project",
-      "CT projecttype",
+      "CT Project",
+      "CT Subproject",
+      "CT Task",
       "JIRA keys"
     ],
     "delimiter": ";",

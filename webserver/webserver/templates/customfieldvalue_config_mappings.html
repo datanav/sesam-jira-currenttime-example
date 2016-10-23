@@ -8,6 +8,7 @@
             <th>CurrentTime project</th>
             <th>CurrentTime task</th>
             <th>CurrentTime subtask</th>
+            <th>Added by</th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
             <td>{{mapping["currenttime_projectname"]  or ""}}</td>
             <td>{{mapping["currenttime_taskname"]  or ""}}</td>
             <td>{{mapping["currenttime_subtaskname"]  or ""}}</td>
+            <td>{{mapping.get("added_by") or "*unknown*"}}</td>
             <td><button data-mapping_id="{{mapping['_id']}}"
                         class="delete-mapping"
                         title="Click to remove this mapping">X</button></td>

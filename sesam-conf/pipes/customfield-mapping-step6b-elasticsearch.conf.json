@@ -3,7 +3,7 @@
   "type": "pipe",
   "source": {
     "type": "dataset",
-    "dataset": "customfield-mapping-step5-compare-hours.conf.json"
+    "dataset": "customfield-mapping-step5-compare-hours"
   },
   "sink": {
     "type": "elasticsearch",

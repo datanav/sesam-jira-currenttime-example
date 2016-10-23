@@ -11,7 +11,7 @@ import time
 
 from flask import request
 
-from .utils import get_search_results_by_query
+from .utils import get_search_results_by_query, assert_user_name_from_request
 
 
 _cached_jira_customfields = None
@@ -95,12 +95,12 @@ def get_jira_customfields():
                     children = []
                     for child in root_option["child_options"]:
                         children.append({
-                            "name": child["customfield"],
+                            "name": child["customvalue"],
                             "id": str(int(child["ID"])),
                         })
                     root_option_info = root_option["option"]
                     formatted_root_option = {
-                      "name": root_option_info["customfield"],
+                      "name": root_option_info["customvalue"],
                       "id": str(int(root_option_info["ID"])),
                     }
                     if children:
@@ -256,13 +256,16 @@ def get():
 
 
 def post():
+    user_name = assert_user_name_from_request()
     delete_mapping = request.form.get("delete") == "1"
     if delete_mapping:
         # The user wants to delete an existing mapping
         mapping_id = request.form.get("mapping_id")
         if not mapping_id:
             return "<p>No mapping_id was specified!</p>" + get_mappings_html()
-        entity = {"_id": mapping_id, "_deleted": True}
+        entity = {"_id": mapping_id,
+                  "_deleted": True,
+                  "deleted_by": user_name}
     else:
         # The user wants to add a new mapping or update an existing one
         jira_customfield_id = int(request.form.get("jira-customfield", "0"))
@@ -287,7 +290,8 @@ def post():
             "jira_customfield_suboption_id": jira_customfield_suboption_id,
             "currenttime_project_id": ct_project_id,
             "currenttime_task_id": ct_task_id,
-            "currenttime_subtask_id": ct_subtask_id}
+            "currenttime_subtask_id": ct_subtask_id,
+            "added_by": user_name}
 
     sesam_url = flask.current_app.config["sesam_base_url"]
     with sesamclient.Connection(sesam_url) as connection:

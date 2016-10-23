@@ -22,7 +22,21 @@
           "switch from '.' to ',' as decimal separator, since Excel prefers it."],
         ["add", "JIRA hours", ["replace", ".", ",", ["string", "_S.timeworked_from_jira"]]],
         ["add", "CT hours", ["replace", ".", ",", ["string", "_S.timeworked_from_currenttime"]]],
-        ["add", "JIRA issues", "_S.jira_issue_key_hours"]
+        ["add", "JIRA issues", "_S.jira_issue_key_hours"],
+
+        ["comment",
+          "Add CT project, task and subtask info. ",
+          "NOTE: the CurrentTime web gui labels the task and subtask as 'Subproject' and 'Task', so that is what we ",
+          "need to do here, since this will be displayed to the end-user.",
+          "  project => 'Project'",
+          "  task => 'Subproject'",
+          "  subtask => 'Task'"
+        ],
+
+        ["add", "CT Project", "_S.ct_projectname"],
+        ["add", "CT Subproject", "_S.ct_taskname"],
+        ["add", "CT Task", "_S.ct_subtaskname"],
+        ["add", "CT Projecttype", "_S.ct_projecttypename"]
       ]
     }
   },

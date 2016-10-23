@@ -89,24 +89,18 @@
         </li>
     </ul>
 
-    <ul>
-        <li>
-            <a href="static/jira-currenttime.xlsx">jira-currenttime.xlsx</a>
-        </li>
-    </ul>
-
     <hr />
     <h2 id="total_hours">Differences in total number of hours in JIRA and CurrentTime</h2>
     {{errorlisting(totals_results)}}
 
 
     <hr />
-    <h2 id="current_time_with_jira_keys_results">Differences in total number of hours in JIRA and CurrentTime</h2>
+    <h2 id="current_time_with_jira_keys_results">Problems with CurrentTime entries that refer to JIRA-issues</h2>
     {{errorlisting(current_time_with_jira_keys_results)}}
 
 
     <hr />
-    <h2 id="customfield_mapping_results">Differences in hours in JIRA-issues that is mapped to a specific CurrentTime subtask</h2>
+    <h2 id="customfield_mapping_results">Problems with JIRA-issues that is mapped to a specific CurrentTime subtask</h2>
     {{errorlisting(customfield_mapping_results)}}
 
 

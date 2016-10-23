@@ -12,6 +12,9 @@
       "Errors",
       "JIRA hours",
       "CT hours",
+      "CT Project",
+      "CT Subproject",
+      "CT Task",
       "JIRA issues"
     ],
     "delimiter": ";",

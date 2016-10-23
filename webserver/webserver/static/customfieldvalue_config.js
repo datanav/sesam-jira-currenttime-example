@@ -20,11 +20,11 @@ $(document).ready(function() {
     $("button.delete-mapping").click(function() {
       var button = $(this);
       var mappingId = button.data("mapping_id");
-
-      $.post("customfieldvalue-config", {"delete": "1", "mapping_id": mappingId}, function(data) {
-        handleResultMappings(data);
-      });
-
+      if (confirm("Are you sure you want to delete this mapping?")) {
+        $.post("customfieldvalue-config", {"delete": "1", "mapping_id": mappingId}, function(data) {
+          handleResultMappings(data);
+        });
+      }
     });
   }
 

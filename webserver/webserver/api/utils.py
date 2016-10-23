@@ -28,13 +28,17 @@ def get_search_results_by_query(doctype, query, _source=True, size = 10000, sort
     return results
 
 
-def get_search_results(doctype, fieldmapping):
-    elasticsearch_client = elasticsearch.Elasticsearch(current_app.config["elasticsearch_host"])
+def assert_user_name_from_request():
     user_name = request.headers.get("x-remote-user")
     if not user_name:
         flask.abort(401)
-
     user_name = user_name.split("\\")[-1]  # remove any domainname from the user_name
+    return user_name
+
+
+def get_search_results(doctype, fieldmapping):
+    elasticsearch_client = elasticsearch.Elasticsearch(current_app.config["elasticsearch_host"])
+    user_name = assert_user_name_from_request()
 
     size = 10000
     search_result = elasticsearch_client.search(
@@ -63,7 +67,6 @@ def get_search_results(doctype, fieldmapping):
                 {"user_name": {"order": "asc"}},
             ],
         })
-
     results = []
     hits = search_result["hits"]
     for hit in hits["hits"]:

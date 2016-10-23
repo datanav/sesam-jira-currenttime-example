@@ -30,12 +30,22 @@
         ["add", "CT hours", ["replace", ".", ",", ["string", "_S.timeworked"]]],
 
 
+
         ["add", "CT note",  ["replace", "\n", " ", ["replace", "\r", " ", "_S.note"]]],
 
-        ["add", "CT subtask", "_S.ct_subtaskname"],
-        ["add", "CT task", "_S.ct_taskname"],
-        ["add", "CT project", "_S.ct_projectname"],
-        ["add", "CT projecttype", "_S.ct_projecttypename"],
+        ["comment",
+          "Add CT project, task and subtask info. ",
+          "NOTE: the CurrentTime web gui labels the task and subtask as 'Subproject' and 'Task', so that is what we ",
+          "need to do here, since this will be displayed to the end-user.",
+          "  project => 'Project'",
+          "  task => 'Subproject'",
+          "  subtask => 'Task'"
+        ],
+
+        ["add", "CT Project", "_S.ct_projectname"],
+        ["add", "CT Subproject", "_S.ct_taskname"],
+        ["add", "CT Task", "_S.ct_subtaskname"],
+        ["add", "CT Projecttype", "_S.ct_projecttypename"],
 
         ["remove", "temp_*"]
 
