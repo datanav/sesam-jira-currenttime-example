@@ -84,11 +84,38 @@
             </div>
             <div>
               The results can be viewed directly <a href="#customfield_mapping_results">below</a>
-              or be downloaded as a <a href="customfield_mapping.csv">csv file</a>.
+              or be downloaded as a <a href="customfield-mappings.csv">csv file</a>.
             </div>
         </li>
     </ul>
 
+
+    {% if administered_currenttime_subtasks %}
+        <p>You ({{user_name}}) have been granted some administrative permissions, so
+            in addition to your own personal hours, you will se problems that is related to the following CurrentTime Tasks.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Subproject</th>
+              <th>Task</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subtask in administered_currenttime_subtasks%}
+            <tr>
+                <td>{{subtask.projectname}}</td>
+                <td>{{subtask.taskname}}</td>
+                <td>{{subtask.subtaskname}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% else %}
+        <p>You ({{user_name}}) don't have any special currenttime-permissions, so you will only see problems that is related to your own hours.</p>
+    {% endif %}
+
+    
     <hr />
     <h2 id="total_hours">Differences in total number of hours in JIRA and CurrentTime</h2>
     {{errorlisting(totals_results)}}

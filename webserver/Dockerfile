@@ -20,7 +20,10 @@ apt-get install -y \
   curl \
   python3 \
   python3-dev \
-  build-essential
+  build-essential \
+  libssl-dev \
+  libffi-dev
+
 
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python3
 COPY ./webserver /webserver
