@@ -9,6 +9,15 @@
     "rules": {
       "default": [
         ["comment",
+          "Add the workentry id based on the username--date--currenttime_subtask_id combination. This is the ",
+          "id of the combined entity that this entity will eventually form part of.",
+          "(A pipe later on in this flow will all the jira workentries for each username--date--currenttime_subtask_id ",
+          "combination into one entity.)"
+        ],
+        ["add", "workentry_id",
+          ["concat", ["list", "_S.user_name", "--", "_S.date", "--", "_T.currenttime_subtask_id"]]],
+
+        ["comment",
           "Filter out jira workentries that doesn't have a customfield mapping."],
 
          ["add", "temp_mappings",
@@ -35,16 +44,6 @@
           ["first", "_T.temp_sorted_mappings"]],
 
         ["add", "currenttime_subtask_id", "_T.temp_selected_mapping.currenttime_subtask_id"],
-
-
-        ["comment",
-          "Add the workentry id based on the username--date--currenttime_subtask_id combination. This is the ",
-          "id of the combined entity that this entity will eventually form part of.",
-          "(A pipe later on in this flow will all the jira workentries for each username--date--currenttime_subtask_id ",
-          "combination into one entity.)"
-        ],
-        ["add", "workentry_id",
-          ["concat", ["list", "_S.user_name", "--", "_S.date", "--", "_T.currenttime_subtask_id"]]],
 
         ["remove", "temp_*"]
       ]
