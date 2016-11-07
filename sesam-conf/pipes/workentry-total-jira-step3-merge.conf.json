@@ -30,8 +30,6 @@
         ["add", "temp_first_worklog_entity", ["first", "_T.temp_worklog_entities"]],
 
         ["add", "date", "_T.temp_first_worklog_entity.date"],
-        ["add", "issueid", "_T.temp_first_worklog_entity.issueid"],
-        ["add", "jira_issue_key", "_T.temp_first_worklog_entity.jira_issue_key"],
         ["add", "user_name", "_T.temp_first_worklog_entity.user_name"],
 
         ["comment", "Get the total number of hours worked by the user on this date."],

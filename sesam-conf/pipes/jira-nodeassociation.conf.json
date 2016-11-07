@@ -1,0 +1,12 @@
+{
+  "_id": "jira-nodeassociation",
+  "source": {
+    "system": "jira",
+    "table": "nodeassociation",
+    "type": "sql"
+  },
+  "pump": {
+    "cron_expression": "0 * * * *"
+  },
+  "type": "pipe"
+}

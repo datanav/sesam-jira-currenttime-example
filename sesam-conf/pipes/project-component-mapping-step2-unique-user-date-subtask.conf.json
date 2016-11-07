@@ -1,8 +1,8 @@
 {
-  "_id": "customfield-mapping-step3-unique-user-date-subtask",
+  "_id": "project-component-mapping-step2-unique-user-date-subtask",
   "source": {
     "type": "dataset",
-    "dataset": "customfield-mapping-step2-workentry-total-jira"
+    "dataset": "project-component-mapping-step1-filter-jira-issues"
   },
   "transform": {
     "type": "dtl",
@@ -14,7 +14,6 @@
           "combination into one entity. "
         ],
         ["filter", ["not", ["is-null", "_S.workentry_id"]]],
-
         ["add", "_id", "_S.workentry_id"]
       ]
     }

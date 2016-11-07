@@ -1,0 +1,60 @@
+{
+  "_id": "project-component-mapping-step3-combine-jiratasks",
+  "source": {
+    "type": "dataset",
+    "dataset": "project-component-mapping-step2-unique-user-date-subtask"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+
+        ["comment",
+          "Look up all the jira workentries that will make up the combined workentry described by _S._id."],
+
+         ["add", "temp_jiraworkentries",
+          ["hops", {
+            "datasets": ["project-component-mapping-step1-filter-jira-issues jiraworkentries"],
+            "where":
+              ["eq", "_S._id", "jiraworkentries.workentry_id"]
+            }
+          ]
+        ],
+
+        ["comment", "The list can be empty if a worklog entry has been deleted in the ",
+          "'project-component-mapping-step1-filter-jira-issues' dataset, but not yet in the ",
+          "'project-component-mapping-step2-unique-user-date-subtask' dataset."],
+        ["filter", ["not", ["is-empty", "_T.temp_jiraworkentries"]]],
+
+        ["comment",
+          "By definition, all the matching worklog entities has the same ",
+          "'date' and 'user_name' attributes, so we ",
+          "can just pick the first value of each."],
+        ["add", "temp_first_jiraworklogentry", ["first", "_T.temp_jiraworkentries"]],
+
+        ["add", "date", "_T.temp_first_jiraworklogentry.date"],
+        ["add", "user_name", "_T.temp_first_jiraworklogentry.user_name"],
+        ["add", "currenttime_subtask_id", "_T.temp_first_jiraworklogentry.currenttime_subtask_id"],
+
+        ["comment", "Get the total number of hours worked in JIRA by the user on this date."],
+        ["add", "timeworked", ["sum", "_T.temp_jiraworkentries.timeworked"]],
+
+        ["comment", "Construct a string that says how many hours the user logged on each JIRA-issue for this date."],
+        ["add", "jira_issue_key_hours",
+          ["join", ", ",
+            ["map",
+              ["concat", ["list", "_.jira_issue_key", ":", ["string", "_.timeworked"], "h"]],
+              "_T.temp_jiraworkentries"]]],
+
+        ["remove", "temp_first_jiraworklogentry"],
+        ["remove", "todotemp_*"]
+
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

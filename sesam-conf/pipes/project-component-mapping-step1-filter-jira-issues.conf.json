@@ -1,0 +1,70 @@
+{
+  "_id": "project-component-mapping-step1-filter-jira-issues",
+  "source": {
+    "type": "dataset",
+    "dataset": "workentry-jira-step3-merge-worklog-entities"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "_id"],
+
+        ["add", "temp_mappings",
+          ["hops", {
+            "datasets": ["cooked-config-jira-project-component-to-currenttime-subtask mapping",
+                         "jira-nodeassociation nodeassociation",
+                         "cooked-jira-jiraissue jira_issue"],
+            "return": "mapping",
+            "where":
+            [
+              ["eq", "_S.issueid", "jira_issue._id"],
+              ["eq", ["string", "jira_issue.PROJECT"], ["string", "mapping.jira_project_id"]],
+              ["or",
+                ["eq", "0", ["string", "mapping.jira_component_id"]],
+                ["and",
+                  ["eq", "nodeassociation.ASSOCIATION_TYPE", "IssueComponent"],
+                  ["eq", ["string", "nodeassociation.SINK_NODE_ID"], ["string", "mapping.jira_component_id"]],
+                  ["eq", ["string", "nodeassociation.SOURCE_NODE_ID"], "jira_issue._id"]
+                ]
+              ]
+            ]}
+          ]
+        ],
+
+        ["filter", ["not", ["is-empty", "_T.temp_mappings"]]],
+
+        ["copy", "*"],
+
+        ["comment",
+          "There can be more than one matching mapping, since the component is optional in the mapping. ",
+          "We can therefore have one mapping with just a project and one mapping with both a project and a component. ",
+          "In such cases we want to use the most specific mapping (i.e. the one with the component). ",
+          "We fix this by sorting the list of mappings om the jira_component_id-attribute, which will be zero ",
+          "for mappings with no componennt defined."
+        ],
+
+        ["add", "temp_selected_mapping",
+          ["first",
+            ["sorted-descending", "_.jira_component_id", "_T.temp_mappings"]]],
+
+
+        ["add", "currenttime_subtask_id", ["string", "_T.temp_selected_mapping.currenttime_subtask_id"]],
+                ["comment",
+          "Add the workentry id based on the username--date--currenttime_subtask_id combination. This is the ",
+          "id of the combined entity that this entity will eventually form part of.",
+          "(A pipe later on in this flow will all the jira workentries for each username--date--currenttime_subtask_id ",
+          "combination into one entity.)"
+        ],
+        ["add", "workentry_id",
+          ["concat", ["list", "_S.user_name", "--", "_S.date", "--", "_T.currenttime_subtask_id"]]],
+        
+        ["remove", "xtemp_*"]
+      ]
+    }
+  },
+  "pump": {
+    "schedule_interval": 10
+  },
+  "type": "pipe"
+}

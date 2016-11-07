@@ -1,0 +1,17 @@
+{
+  "_id": "project-component-mapping-step5b-elasticsearch",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "project-component-mapping-step4-compare-hours"
+  },
+  "sink": {
+    "type": "elasticsearch",
+    "system": "elasticsearch",
+    "default_type": "project-component-mapping",
+    "default_index": "jira-currenttime"
+  },
+  "pump": {
+    "schedule_interval": 10
+  }
+}

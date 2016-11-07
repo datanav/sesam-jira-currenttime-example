@@ -2,6 +2,7 @@ import collections
 from flask import render_template, request, current_app
 import pathlib
 
+from .jira_project_component_mappings.csv import get_jira_project_component_mapping_results
 from .customfield_mappings.csv import get_customfield_mapping_results
 from .compare_totals.csv import get_totals_searchresults
 from .currenttime_with_jira_keys.csv import get_current_time_with_jira_keys_results
@@ -16,7 +17,8 @@ def get_administered_currenttime_subtasks():
 
 
     user_name = assert_user_name_from_request()
-
+    # it seems that elasticsearch indexes on lowercase
+    user_name = user_name.lower()
     administered_subtasks = get_search_results_by_query(
         doctype="currenttime-subtask",
         query={
@@ -46,7 +48,7 @@ def get():
     totals_results = get_totals_searchresults()[1]
     current_time_with_jira_keys_results = get_current_time_with_jira_keys_results()[1]
     customfield_mapping_results = get_customfield_mapping_results()[1]
-
+    jira_project_component_mapping_results = get_jira_project_component_mapping_results()[1]
     administered_currenttime_subtasks  = get_administered_currenttime_subtasks()
 
 
@@ -55,6 +57,7 @@ def get():
                            totals_results=totals_results,
                            current_time_with_jira_keys_results=current_time_with_jira_keys_results,
                            customfield_mapping_results=customfield_mapping_results,
+                           jira_project_component_mapping_results=jira_project_component_mapping_results,
                            administered_currenttime_subtasks=administered_currenttime_subtasks,
                            user_name = assert_user_name_from_request()
                            )

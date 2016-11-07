@@ -1,0 +1,61 @@
+{
+  "_id": "cooked-config-jira-project-component-to-currenttime-subtask",
+  "type": "pipe",
+  "source": {
+    "type": "dataset",
+    "dataset": "config-jira-project-component-to-currenttime-subtask"
+  },
+  "transform": {
+    "type": "dtl",
+    "rules": {
+      "default": [
+        ["copy", "*"],
+
+        ["comment",
+          "We look up the human-readable names of everything."],
+
+        ["add", "temp_currenttime_subtask",
+          ["first",
+            ["hops", {
+              "datasets": ["cooked-currenttime-subtask currenttime_subtask"],
+              "where":
+                ["eq", ["string", "_S.currenttime_subtask_id"], "currenttime_subtask._id"]
+              }
+            ]
+          ]
+        ],
+        ["add", "currenttime_projectname", "_T.temp_currenttime_subtask.projectname"],
+        ["add", "currenttime_taskname", "_T.temp_currenttime_subtask.taskname"],
+        ["add", "currenttime_subtaskname", "_T.temp_currenttime_subtask.subtaskname"],
+
+
+        ["add", "temp_jira_project",
+          ["first",
+            ["hops", {
+              "datasets": ["jira-project jira_project"],
+              "where":
+                ["eq", ["string", "_S.jira_project_id"], "jira_project._id"]
+              }
+            ]
+          ]
+        ],
+
+        ["add", "temp_jira_component",
+          ["first",
+            ["hops", {
+              "datasets": ["jira-component jira_component"],
+              "where":
+                ["eq", ["string", "_S.jira_component_id"], "jira_component._id"]
+              }
+            ]
+          ]
+        ],
+
+        ["add", "jira_project_name", "_T.temp_jira_project.pname"],
+        ["add", "jira_component_name", "_T.temp_jira_component.cname"],
+
+        ["remove", "temp_*"]
+      ]
+    }
+  }
+}

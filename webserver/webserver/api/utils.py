@@ -40,6 +40,9 @@ def get_search_results(doctype, fieldmapping):
     elasticsearch_client = elasticsearch.Elasticsearch(current_app.config["elasticsearch_host"])
     user_name = assert_user_name_from_request()
 
+    # it seems that elasticsearch indexes on lowercase
+    user_name = user_name.lower()
+
     size = 10000
     search_result = elasticsearch_client.search(
         index="jira-currenttime",

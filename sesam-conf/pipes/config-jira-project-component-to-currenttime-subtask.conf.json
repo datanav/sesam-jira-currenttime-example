@@ -1,0 +1,7 @@
+{
+  "_id": "config-jira-project-component-to-currenttime-subtask",
+  "type": "pipe",
+  "source": {
+    "type": "http_endpoint"
+  }
+}

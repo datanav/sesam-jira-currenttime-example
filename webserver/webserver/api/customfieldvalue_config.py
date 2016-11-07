@@ -83,7 +83,7 @@ def get_jira_customfields():
                     customfield_id_to_rootoptions[option_info["option"]["CUSTOMFIELD"]].append(option_info)
 
 
-            # format the information with for the clientside javascript
+            # format the information for the clientside javascript
             jira_customfields = []
             for customfield_id, root_options in customfield_id_to_rootoptions.items():
                 customfield = customfields[customfield_id]
@@ -195,7 +195,7 @@ def get_ct_project_task_subtask():
                 }
                 task["subtasks"][0] = {
                     "id": 0,
-                    "name": "*Select a Subtask*"
+                    "name": "*Select a Task*"
                 }
             task["subtasks"][subtask_id] = {
                 "id": subtask_id,
@@ -307,10 +307,6 @@ def post():
         cooked_mapping_pump.wait_for_pump_to_finish_running()
         cooked_mapping_pump.start()
         cooked_mapping_pump.wait_for_pump_to_finish_running()
-
-    #return "jira_customfield_id:'%s', jira_customfield_option_id:'%s', jira_customfield_suboption_id:'%s', ct_project_id:'%s', ct_task_id:'%s', ct_subtask_id:'%s'" % (
-    #    jira_customfield_id, jira_customfield_option_id, jira_customfield_suboption_id, ct_project_id, ct_task_id, ct_subtask_id
-    #)
 
     return get_mappings_html()
 

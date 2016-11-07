@@ -290,3 +290,8 @@ On Windows, start PowerShell and run this command::
   
 The cvs-files are fairly big and human unfriendly, but a good way to view them is to open the files in Microsoft Excel and
 use Excel's functionality to do searching, filtering and sorting.
+
+
+References
+----------
+`JIRA database schema <https://developer.atlassian.com/jiradev/jira-platform/jira-architecture/database-schema>`_

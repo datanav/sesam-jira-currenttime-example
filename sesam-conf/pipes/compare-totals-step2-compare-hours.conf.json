@@ -10,7 +10,7 @@
     "rules": {
       "default": [
         ["comment",
-         "This  pipe compares the number of hours in JIRA and CurrentTime and creates an appropirate errormessage ",
+         "This  pipe compares the number of hours in JIRA and CurrentTime and creates an appropriate errormessage ",
          "if needed."
         ],
 

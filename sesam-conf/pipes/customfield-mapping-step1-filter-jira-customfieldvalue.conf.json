@@ -8,6 +8,7 @@
     "type": "dtl",
     "rules": {
       "default": [
+        ["copy", "_id"],
         ["comment", "filter out customvalues that have no currentime mapping defined."],
 
         ["filter",

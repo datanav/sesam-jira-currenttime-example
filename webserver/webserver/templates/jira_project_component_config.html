@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>JIRA customfield mapping configuration</title>
+    <title>JIRA project+component mapping configuration</title>
     <link type="text/css" href="static/index.css" rel="stylesheet"/>
 </head>
 <body>
-    <h1>JIRA customfield mapping configuration</h1>
+    <h1>JIRA project+component mapping configuration</h1>
     <p>
       One way to tell the JIRA/Currenttime checker which JIRA-issues and CurrentTime subtasks are connected
-      is by manually specifying that certain customfield values on a JIRA-issue means that the JIRA-issue
-      "belongs to" a CurrentTime task.
+      is by manually specifying that certain JIRA-projects (and optionally JIRA Components) "belongs to" a
+      CurrentTime task.
     </p>
 
     <div>
@@ -18,17 +18,12 @@
             <div>
                 <fieldset style="display:inline">
                     <legend>JIRA:</legend>
-                    <label>Customfield:
-                        <select name="jira-customfield">
-                            <option value="0">*Select a customfield*</option>
+                    <label>Project:
+                        <select name="jira-project">
                         </select>
                     </label>
-                    <label>Option:
-                        <select name="jira-customfield-option">
-                        </select>
-                    </label>
-                    <label id="jira-customfield-suboption-parent" style="display: none">Sub-option:
-                        <select name="jira-customfield-suboption">
+                    <label id="jira-component-parent">Component:
+                        <select name="jira-component">
                         </select>
                     </label>
                 </fieldset>
@@ -64,19 +59,19 @@
 
     <hr />
 
-    <h2>JIRA customfield value => CurrentTime task mappings:</h2>
-    <div id="customfieldvalue-mappings">
+    <h2>JIRA project&component => CurrentTime task mappings:</h2>
+    <div id="jira-project-component-mappings">
         {{mappings|safe}}
     </div>
 
     <div id="busyIndicator"></div>
     <script src="static/jquery-3.1.1.js"></script>
     <script >
-        var jiraCustomfields = {{ jira_customfields | safe }};
+        var jiraProjects = {{ jira_projects| safe }};
         var currenttimeProjects = {{ currenttime_projects | safe }};
 
     </script>
-    <script src="static/customfieldvalue_config.js"></script>
+    <script src="static/jira_project_component_config.js"></script>
 
 
 </body>

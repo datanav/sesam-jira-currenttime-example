@@ -1,0 +1,25 @@
+{
+  "_id": "project-component-mapping-step7-csv",
+  "source": {
+    "type": "dataset",
+    "dataset": "project-component-mapping-step5-csv-format"
+  },
+  "sink": {
+    "type": "csv_endpoint",
+    "columns": [
+      "Date",
+      "Username",
+      "Errors",
+      "JIRA hours",
+      "CT hours",
+      "CT Project",
+      "CT Subproject",
+      "CT Task",
+      "JIRA issues"
+    ],
+    "delimiter": ";",
+    "lineterminator": "\r\n",
+    "skip-deleted-entities": true
+  },
+  "type": "pipe"
+}

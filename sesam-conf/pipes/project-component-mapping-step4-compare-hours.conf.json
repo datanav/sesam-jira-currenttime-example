@@ -1,9 +1,9 @@
 {
-  "_id": "customfield-mapping-step5-compare-hours",
+  "_id": "project-component-mapping-step4-compare-hours",
   "type": "pipe",
   "source": {
     "type": "dataset",
-    "dataset": "customfield-mapping-step4-combine-jiratasks"
+    "dataset": "project-component-mapping-step3-combine-jiratasks"
   },
   "transform": {
     "type": "dtl",
@@ -67,7 +67,7 @@
         ["add", "ct_subtask_attesting_user_name", "_T.temp_currenttime_subtask.subtask_attesting_user_name"],
         ["add", "ct_subtask_leader_user_name", "_T.temp_currenttime_subtask.subtask_leader_user_name"],
 
-        ["remove", "temp_*"]
+        ["remove", "todotemp_*"]
 
       ]
     }

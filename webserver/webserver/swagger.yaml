@@ -34,6 +34,26 @@ paths:
         200:
           description: OK
 
+  /jira-project-component-config:
+    get:
+      summary:
+        "Returns an html page that lets the user set up the JIRA project+component => CurrentTime subtask mapping"
+      produces:
+        - text/html
+      responses:
+        200:
+          description: OK
+
+    post:
+      summary:
+        Add or deletes a JIRA customfield value => CurrentTime subtask mapping. Returns the resulting list of mappings
+        as html.
+      produces:
+        - text/html
+      responses:
+        200:
+          description: OK
+
   /currenttime-projects:
     get:
       summary:
@@ -106,6 +126,17 @@ paths:
       summary:
         Returns a CSV-file that displays problems with JIRA issues that has a customfield value that is
         mapped to a CurrentTime subtask.
+      produces:
+        - text/csv
+      responses:
+        200:
+          description: OK
+
+  /jira-project-component-mappings.csv:
+    get:
+      summary:
+        Returns a CSV-file that displays problems with JIRA issues that has a "project" and (optionally) "component"
+        value that is mapped to a CurrentTime subtask.
       produces:
         - text/csv
       responses:

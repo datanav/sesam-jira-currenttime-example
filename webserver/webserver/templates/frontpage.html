@@ -87,6 +87,17 @@
               or be downloaded as a <a href="customfield-mappings.csv">csv file</a>.
             </div>
         </li>
+        <li>
+            <strong>Problems with JIRA project&component mappings</strong>
+            <div>
+                This test checks for problems with JIRA entries that has a "project" and (optionally) "component"
+                value that maps them to a CurrentTime subtask. (As specified in the <a href="jira-project-component-config">configuration</a>).
+            </div>
+            <div>
+              The results can be viewed directly <a href="#jira_project_component_mapping_results">below</a>
+              or be downloaded as a <a href="jira-project-component-mappings.csv">csv file</a>.
+            </div>
+        </li>
     </ul>
 
 
@@ -127,10 +138,13 @@
 
 
     <hr />
-    <h2 id="customfield_mapping_results">Problems with JIRA-issues that is mapped to a specific CurrentTime subtask</h2>
+    <h2 id="customfield_mapping_results">Problems with JIRA-issues with a customfield mapping</h2>
     {{errorlisting(customfield_mapping_results)}}
 
 
+    <hr />
+    <h2 id="jira_project_component_mapping_results">Problems with JIRA-issues with a project&amp;component mapping</h2>
+    {{errorlisting(jira_project_component_mapping_results)}}
 
     <hr />
 

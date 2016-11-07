@@ -1,0 +1,33 @@
+<table>
+    <thead>
+        <tr>
+            <th>JIRA Project</th>
+            <th>JIRA Component</th>
+            <th class="mapping-arrow"></th>
+            <th>CurrentTime Project</th>
+            <th>CurrentTime Subproject</th>
+            <th>CurrentTime Task</th>
+            <th>Added by</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for mapping in mappings %}
+        <tr>
+            <td>{{mapping["jira_project_name"]  or ""}}</td>
+            <td>{{mapping["jira_component_name"]  or ""}}</td>
+
+            <td class="mapping-arrow">=&gt;</td>
+
+            <td>{{mapping["currenttime_projectname"]  or ""}}</td>
+            <td>{{mapping["currenttime_taskname"]  or ""}}</td>
+            <td>{{mapping["currenttime_subtaskname"]  or ""}}</td>
+            <td>{{mapping.get("added_by") or "*unknown*"}}</td>
+            <td><button data-mapping_id="{{mapping['_id']}}"
+                        class="delete-mapping"
+                        title="Click to remove this mapping">X</button></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
