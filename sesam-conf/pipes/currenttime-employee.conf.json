@@ -4,7 +4,8 @@
     "system": "currenttime",
     "table": "employee",
     "type": "sql",
-    "blacklist": ["pinsalt", "salt", "pincode", "pwd"]
+    "blacklist": ["pinsalt", "salt", "pincode", "pwd"],
+    "preserve_null_values": true
   },
   "pump": {
     "cron_expression": "0 0 * * *"

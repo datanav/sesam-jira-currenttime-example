@@ -3,7 +3,8 @@
   "source": {
     "system": "jira",
     "table": "project",
-    "type": "sql"
+    "type": "sql",
+    "preserve_null_values": true
   },
   "pump": {
     "cron_expression": "0 0 * * *"

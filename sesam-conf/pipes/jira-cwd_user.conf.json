@@ -4,7 +4,8 @@
     "system": "jira",
     "table": "cwd_user",
     "type": "sql",
-    "blacklist": ["CREDENTIAL"]
+    "blacklist": ["CREDENTIAL"],
+    "preserve_null_values": true
   },
   "pump": {
     "cron_expression": "0 0 * * *"

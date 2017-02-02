@@ -4,7 +4,8 @@
     "system": "jira",
     "table": "jiraissue",
     "type": "sql",
-    "updated_column": "UPDATED"
+    "updated_column": "UPDATED",
+    "preserve_null_values": true
   },
   "pump": {
     "cron_expression": "0 * * * *",
