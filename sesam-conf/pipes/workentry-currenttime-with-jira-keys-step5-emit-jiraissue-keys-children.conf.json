@@ -7,8 +7,5 @@
   "transform": {
      "type": "emit_children"
   },
-  "pump": {
-    "schedule_interval": 10
-  },
   "type": "pipe"
 }

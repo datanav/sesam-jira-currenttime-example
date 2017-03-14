@@ -10,8 +10,5 @@
     "system": "elasticsearch",
     "default_type": "project-component-mapping",
     "default_index": "jira-currenttime"
-  },
-  "pump": {
-    "schedule_interval": 10
   }
 }

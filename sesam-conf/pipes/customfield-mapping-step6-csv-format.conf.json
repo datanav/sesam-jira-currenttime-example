@@ -39,8 +39,5 @@
         ["add", "CT Projecttype", "_S.ct_projecttypename"]
       ]
     }
-  },
-  "pump": {
-    "schedule_interval": 10
   }
 }

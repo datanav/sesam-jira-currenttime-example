@@ -36,8 +36,5 @@
       ]
     }
   },
-  "pump": {
-    "schedule_interval": 10
-  },
   "type": "pipe"
 }

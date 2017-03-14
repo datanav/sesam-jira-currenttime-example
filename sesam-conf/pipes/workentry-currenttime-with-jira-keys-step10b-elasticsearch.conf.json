@@ -10,8 +10,5 @@
     "system": "elasticsearch",
     "default_type": "workentry-currenttime-with-jira-keys",
     "default_index": "jira-currenttime"
-  },
-  "pump": {
-    "schedule_interval": 10
   }
 }

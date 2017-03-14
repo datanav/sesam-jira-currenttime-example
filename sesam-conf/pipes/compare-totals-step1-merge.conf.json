@@ -7,8 +7,5 @@
     "datasets": [
       "workentry-total-jira-step3-merge",
       "workentry-total-currenttime-step3-merge"]
-  },
-  "pump": {
-    "schedule_interval": 10
   }
 }
